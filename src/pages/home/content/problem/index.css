@@ -1,0 +1,39 @@
+body{
+    font-size: 16px;
+}
+.problem_container{
+    padding: 10px;
+}
+.problem_container .problems_form_layout{
+    width: 92%;
+    margin-top: 20px;
+    background-color: #e7f6f6;
+    padding: 25px;
+}
+.problems_layout{
+    display: block;
+}
+.problems_option_layout{
+    display: flex;
+    margin: 8px 0;
+}
+.problems_option_layout .ant-input, .problems_layout .ant-input{
+    padding: 7px 11px;
+}
+.ant-form-vertical .ant-form-item {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.problem_container .ant-tag{
+    font-size: 16px;
+    padding: 5px 8px;
+}
+.ant-breadcrumb{
+    font-size: 16px;
+}
+.problems_form_layout .ant-col-18 {
+    max-width: 92%;
+}
+.search-item .ant-form-item {
+    margin-bottom: 15px !important;
+}

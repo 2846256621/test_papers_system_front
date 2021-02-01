@@ -1,0 +1,17 @@
+.test-paper-form{
+    width: 80%;
+}
+.test-paper-form .ant-form-item {
+    margin: 20px 0;
+}
+.test-paper-details {
+    background-color: #e7f6f6;
+}
+
+.test-paper-automatic .ant-input{
+    padding: 5px 11px;
+}
+.test-paper-automatic .ant-select-selector {
+    padding-top: 2px;
+    padding-bottom: 3px;
+}

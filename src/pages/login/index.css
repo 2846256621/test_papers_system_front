@@ -1,0 +1,22 @@
+body{
+    background:  url('../../assets/images/background.jpg') 100% 100% no-repeat;
+    background-size: cover;
+}
+#login-container{
+    width: 400px;
+    float: right;
+    margin: 200px 200px 0 0;
+}
+#login-container .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    display: none;
+}
+#login-container .ant-form-item-explain{
+    font-size: 12px;
+}
+#login-container .ant-form-item{
+    margin-bottom: 15px;
+}
+#login-container .anticon{
+    color: #aeaeae;
+    font-size: 16px;
+}

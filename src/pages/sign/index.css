@@ -1,0 +1,18 @@
+#signIn-container{
+    width: 400px;
+    float: right;
+    margin: 200px 200px 0 0;
+}
+#signIn-container .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    display: none;
+}
+#signIn-container .ant-form-item-explain{
+    font-size: 12px;
+}
+#signIn-container .ant-form-item{
+    margin-bottom: 15px;
+}
+#signIn-container .anticon{
+    color: #aeaeae;
+    font-size: 16px;
+}

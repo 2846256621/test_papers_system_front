@@ -1,0 +1,30 @@
+.site-layout-background{
+    padding: 24px;
+    margin: 0;
+    background-color: #ffffff;
+    background-image: none;
+    // height: 820px;
+}
+.ant-tabs-nav {
+    border-bottom: 1px solid #1890ff;
+}
+.warning{
+    color: #f54747;
+    font-size: 13px;
+}
+.person_form .ant-input{
+    padding: 7px 11px;
+    border: 1px solid #f54747;
+}
+.person_form  .ant-input[disabled] {
+    border: 1px solid #d9d9d9;
+}
+.home_container{
+    padding: 10px;
+}
+.home_container .ant-statistic-content {
+    font-size: 18px;
+}
+.home_container .ant-card-head {
+    font-size: 14px;
+}
