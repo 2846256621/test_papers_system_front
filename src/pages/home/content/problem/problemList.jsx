@@ -65,6 +65,8 @@ class app extends Component {
                 score: '',
             },
             check: {},
+            userId: window.localStorage.getItem('userId'),
+            type: window.localStorage.getItem('type'),
         }
     }
     // 删除题目
@@ -136,13 +138,22 @@ class app extends Component {
             {
                 title: '操作',
                 key: '',
-                render: (text, record) => (
-                    <Space size="middle">
-                        <Link to='/problemsManage/view' replace>查看题目</Link>
-                        <Link to='/problemsManage/modify' replace>修改题目</Link>
-                        <a onClick={() => {this.onDelProblem(record.id)}}>删除题目</a>
-                    </Space>
-                ),
+                render: (text, record) => {
+                    const { userId, type } = this.state;
+                    return (
+                        <Space size="middle">
+                            <Link to='/problemsManage/view' replace>查看题目</Link>
+                            {
+                                (userId === record.userId || type === '1') ?
+                                <>
+                                    <Link to='/problemsManage/modify' replace>修改题目</Link>
+                                    <a onClick={() => {this.onDelProblem(record.id)}}>删除题目</a>
+                                </>
+                                : ''
+                            }
+                        </Space>
+                    )
+                }
               },
           ];
           

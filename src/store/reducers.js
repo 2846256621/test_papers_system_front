@@ -82,8 +82,36 @@ const subjects = (state = {
             return state;
     }
 }
+
+const users = (state = {
+    userAddSuccess: false,
+    userUpdateSuccess: false,
+    userForbidSuccess: false,
+}, action) => {
+    switch (action.type) {
+
+        case actionType.ADD_USER:
+            state = Object.assign({}, state, {
+                userAddSuccess: action.userAddSuccess,
+            });
+            return state;
+        case actionType.UPDATE_USER: 
+            state = Object.assign({}, state, {
+                userUpdateSuccess: action.userUpdateSuccess,
+            });
+            return state;
+        case actionType.FORBID_USER: 
+            state = Object.assign({}, state, {
+                userForbidSuccess: action.userForbidSuccess,
+            });
+            return state;
+        default:
+            return state;
+    }
+}
 export default combineReducers({
     login,
     points,
     subjects,
+    users,
 });

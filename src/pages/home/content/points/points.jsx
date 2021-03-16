@@ -39,6 +39,8 @@ class app extends Component {
             check: {},
             pageSize: 10,
             currentPage: 1,
+            userId: window.localStorage.getItem('userId'),
+            type: window.localStorage.getItem('type'),
         }
     }
 
@@ -69,12 +71,21 @@ class app extends Component {
             {
                 title: '操作',
                 key: '',
-                render: (text, record) => (
-                    <Space size="middle">
-                        <a onClick={ () => { this.pointManageModal('modify', record)}}>修改知识点</a>
-                        <a onClick={() => {this.onDelPoint(record.pointId)}}>删除知识点</a>
-                    </Space>
-                ),
+                render: (text, record) => {
+                    const { userId, type } = this.state;
+                    return (
+                        <Space size="middle">
+                            {
+                               (userId === record.userId || type === '1')  ?
+                                <>
+                                    <a onClick={ () => { this.pointManageModal('modify', record)}}>修改知识点</a>
+                                    <a onClick={() => {this.onDelPoint(record.pointId)}}>删除知识点</a>
+                                </>
+                                : '无'
+                            }
+                        </Space>
+                    )
+                } 
               },
           ];
           

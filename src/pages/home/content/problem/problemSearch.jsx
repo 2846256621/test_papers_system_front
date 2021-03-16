@@ -172,7 +172,7 @@ export default class app extends Component {
                             <Button
                                 type="primary"
                                 htmlType="submit"
-                                onClick={() => {handleSubmit()}}
+                                onClick={() => { handleSubmit() }}
                             >
                                 查询
                             </Button> : ''

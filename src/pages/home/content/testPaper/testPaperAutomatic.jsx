@@ -183,7 +183,7 @@ class app extends Component {
             examName,
             startTime,
             endTime,
-            subject,
+            subjectId,
             points,
             difficulty,
             problemTypeInfo,
@@ -191,7 +191,7 @@ class app extends Component {
         check.examName = !examName ? '请输入试卷名称' : '';
         check.startTime = !startTime ? '请选择考试开始时间' : '';
         check.endTime = !endTime ? '请输入考试结束时间': '';
-        check.subject = !subject ? '请选择课程' : '';
+        check.subject = !subjectId ? '请选择课程' : '';
         check.points = !points ? '请选择选择包含知识点' : '';
         check.difficulty = !difficulty ? '请输入试卷难度' : '';
         problemTypeInfo.forEach((item) => {

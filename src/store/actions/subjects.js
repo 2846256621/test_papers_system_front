@@ -56,7 +56,7 @@ const actions = {
         });
     },
 
-    addSubject: params => dispatch => {
+    addSubject: params => (dispatch) => {
         const options = {
             method: 'post',
             api: APIS.addSubject,

@@ -12,8 +12,13 @@ const { SubMenu } = Menu;
 export default class app extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            type: window.localStorage.getItem('type'),
+        }
     }
     render() {
+        const { type } = this.state;
+        console.log('type |||', type);
         return (
             <div>
                 <Menu
@@ -34,13 +39,17 @@ export default class app extends Component {
                     </SubMenu>
                     <SubMenu key="sub2" icon={<SolutionOutlined />} title="试题管理">
                         <Menu.Item key="6"><Link to='/problemsManage/add' replace>增加题目</Link></Menu.Item>
-                        <Menu.Item key="7"><Link to='/problemList'>题库管理</Link></Menu.Item>
+                        <Menu.Item key="7"><Link to='/problemList'>题目管理</Link></Menu.Item>
                         <Menu.Item key="8"><Link to='/pointsList'>知识点管理</Link></Menu.Item>
                         <Menu.Item key="9"><Link to='/subjectsList'>学科管理</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub3" icon={<UserOutlined />} title="账号管理">
                         <Menu.Item key="10"><Link to='/userPerson'>个人中心</Link></Menu.Item>
-                        <Menu.Item key="11"><Link to='/userManager'>用户管理</Link></Menu.Item>
+                        {
+                            type === '1' ?
+                            <Menu.Item key="11"><Link to='/userManager'>用户管理</Link></Menu.Item>
+                            : ''
+                        }
                     </SubMenu>
                 </Menu>
             </div>

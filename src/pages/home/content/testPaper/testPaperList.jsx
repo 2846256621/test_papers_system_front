@@ -56,6 +56,8 @@ class app extends Component {
             },
             check: {},
             modalFormDate: {},
+            userId: window.localStorage.getItem('userId'),
+            type: window.localStorage.getItem('type'),
         }
     }
 
@@ -124,14 +126,25 @@ class app extends Component {
                 title: '操作',
                 key: '',
                 fixed: 'right',
-                render: (text, record) => (
-                    <Space size="middle">
-                        <Link to='/testPaperDetails' replace>查看试卷</Link>
-                        <a onClick={() => {this.onModifyTestPaper(record)}}>修改试卷</a>
-                        <a onClick={() => {this.onDelTestPaper(record.id)}}>删除试卷</a>
-                        <a onClick={() => {this.onDelProblem(record.id)}}>导出试卷</a>
-                    </Space>
-                ),
+                width:200,
+                render: (text, record) => {
+                    const { userId, type } = this.state;
+                    return (
+                        <Space size="middle">
+                            <Link to='/testPaperDetails' replace>查看试卷</Link>
+                            {
+                                (userId === record.userId  || type === '1') ? 
+                                 (
+                                    <>
+                                        <a onClick={() => {this.onModifyTestPaper(record)}}>修改试卷</a>
+                                        <a onClick={() => {this.onDelTestPaper(record.id)}}>删除试卷</a>
+                                    </>
+                                ) : ''
+                            }
+                            
+                        </Space>
+                    )
+                } 
               },
           ];
           

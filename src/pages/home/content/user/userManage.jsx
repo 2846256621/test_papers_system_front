@@ -12,8 +12,10 @@ import {
     Modal,
     Pagination,
 } from 'antd';
+import { connect } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
+import user from '../../../../store/actions/user';
 import $ajax from '../../../../utils/ajax';
 import APIS from '../../../../constants/api';
 const { Content } = Layout;
@@ -31,42 +33,26 @@ class app extends Component {
             tableData: [],
         }
     }
+
     // 删除用户
-    onDelUser = (id) => {
-        confirm({
-            title: '系统提示',
-            icon: <ExclamationCircleOutlined />,
-            content: `确定要删除用户${id}吗？`,
-            style: { marginTop: 150 },
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk() {
-              console.log('OK');
-            },
-            onCancel() {
-              console.log('Cancel');
-            },
-          });
-    }
-    // 删除用户
-    onDelUser = (id) => {
-        confirm({
-            title: '系统提示',
-            icon: <ExclamationCircleOutlined />,
-            content: `确定要删除用户${id}吗？`,
-            style: { marginTop: 150 },
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk() {
-              console.log('OK');
-            },
-            onCancel() {
-              console.log('Cancel');
-            },
-          });
-    }
+    // onDelUser = (id) => {
+    //     confirm({
+    //         title: '系统提示',
+    //         icon: <ExclamationCircleOutlined />,
+    //         content: `确定要删除用户${id}吗？`,
+    //         style: { marginTop: 150 },
+    //         okText: '确认',
+    //         okType: 'danger',
+    //         cancelText: '取消',
+    //         onOk() {
+    //           console.log('OK');
+    //         },
+    //         onCancel() {
+    //           console.log('Cancel');
+    //         },
+    //       });
+    // }
+
     // 禁用或启用用户
     onDisableUser = (id, auth) => {
         confirm({
@@ -79,7 +65,14 @@ class app extends Component {
             cancelText: '取消',
             onOk() {
                 // 确认之后，直接返回登录页
-                console.log('OK');
+                const { forbidUser } = this.props;
+                forbidUser();
+                setTimeout( () => {
+                    const { userForbidSuccess } = this.props;
+                    if (userForbidSuccess) {
+                        window.location.href = '/login';
+                    }
+                }, 500);
             },
             onCancel() {
                 console.log('Cancel');
@@ -122,7 +115,7 @@ class app extends Component {
                 render: (text, record) => (
                     <Space size="middle">
                         <a onClick={ () => { this.userManageModal('modify', record)}}>修改用户信息</a>
-                        <a onClick={() => {this.onDelUser(record.id)}}>删除</a>
+                        {/* <a onClick={() => {this.onDelUser(record.id)}}>删除</a> */}
                         <a onClick={() => {this.onDisableUser(record.id, record.status)}}>
                             {
                                 record.status ?
@@ -199,14 +192,43 @@ class app extends Component {
     // 确认添加或修改
     onOkModify = (type, record) => {
         const { modalFormDate } = this.state;
+        const { addUser, updateUser} = this.props;
         if(type === 'add') {
-            console.log('新增数据', type,modalFormDate);
-            // 请求返回之后，modalFormDate清空
+            console.log('新增数据', type, modalFormDate);
+            addUser(modalFormDate);
+            setTimeout( () => {
+                // 请求返回之后，modalFormDate清空
+                const { userAddSuccess } = this.props;
+                if (userAddSuccess) {
+                    const tempFormData = modalFormDate;
+                    tempFormData.username = '';
+                    tempFormData.password = '';
+                    this.setState({
+                        modalFormDate: tempFormData,
+                    }, () => {
+                        this.handleGetUserList();
+                    });
+                }
+            }, 500);
         }
         if( type === 'modify'){
             const tempModalFormDate = Object.assign({}, record, modalFormDate,);
             console.log('修改数据',type,tempModalFormDate);
             // 请求返回之后，modalFormDate清空
+            updateUser(tempModalFormDate);
+            setTimeout(() => {
+                const { userUpdateSuccess } = this.props;
+                if (userUpdateSuccess) {
+                    const tempFormData = tempModalFormDate;
+                    tempFormData.username = '';
+                    tempFormData.password = '';
+                    this.setState({
+                        modalFormDate: tempFormData,
+                    }, () => {
+                        this.handleGetUserList();
+                    });
+                }
+            }, 500);
         }
     }
 
@@ -280,7 +302,7 @@ class app extends Component {
                         >
                             <Form.Item
                                 label="用户名"
-                                name="subject"
+                                name="username"
                             >
                                 <Input
                                     placeholder="请输入用户名"
@@ -325,4 +347,19 @@ class app extends Component {
     }
 }
 
-export default WrappedComponent(app);
+const mapStateToProps = (state) => ({
+    userAddSuccess: state.users.usersAddSuccess,
+    userUpdateSuccess: state.users.usersUpdateSuccess,
+    userForbidSuccess: state.users.userForbidSuccess,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    addUser: params => dispatch(user.addUser(params)),
+    updateUser: params => dispatch(user.updateUser(params)),
+    forbidUser: params => dispatch(user.forbidUser(params)),
+})
+
+export default WrappedComponent(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(app));

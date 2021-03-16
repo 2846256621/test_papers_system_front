@@ -6,9 +6,10 @@ import { message } from 'antd';
 const actions = {
     getPoints: params => dispatch => {
         const options = {
-            method: 'get',
+            method: 'post',
             api: APIS.getPoints,
             params,
+            contentType: 'json',
         };
         $ajax.common(options).then((res) => {
             if (res.code === 10000) {

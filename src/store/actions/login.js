@@ -18,7 +18,8 @@ const actions = {
                     username: res.data.userName,
                     type: res.data.type,
                 });
-                window.localStorage.setItem('username', res.data.username);
+                window.localStorage.setItem('userId', res.data.userId);
+                window.localStorage.setItem('username', res.data.userName);
                 window.localStorage.setItem('type', res.data.type); 
                 params.props.history.push('/home');
             } else {

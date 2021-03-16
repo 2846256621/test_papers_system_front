@@ -1,24 +1,32 @@
-const target= 'http://192.168.1.5:10055';
-const test = 'https://www.fastmock.site/mock/67fa6d4181628fd727a8a4c44d93dd5c/exam_system';
+const target= 'http://localhost:10055';
+// const test = 'https://www.fastmock.site/mock/67fa6d4181628fd727a8a4c44d93dd5c/exam_system';
+
 const APIS = {
     // 登录注册
     verificationCode: `${target}/users/createCode`,
     userRegister:`${target}/users/userRegister`,
     getUserList:`${target}/userAdmin/getUserList`,
-    login:`${test}/users/userLogin`,
+    login:`${target}/users/userLogin`,
 
     // 知识点管理
-    getPoints: `${test}/point/selectPoint`,
-    getAllPoints: `${test}/point/selectAllPoint`,
-    addPoint: `${test}/point/addPoint`,
-    updatePoint: `${test}/point/updatePoint`,
-    dropPoint: `${test}/point/dropPoint`,
+    getPoints: `${target}/point/selectPoint`,
+    getAllPoints: `${target}/point/selectAllPoint`,
+    addPoint: `${target}/point/addPoint`,
+    updatePoint: `${target}/point/updatePoint`,
+    dropPoint: `${target}/point/dropPoint`,
 
     // 学科管理
-    getSubjects: `${test}/subject/selectSubjectList`,
-    getAllSubjects: `${test}/subject/selectAllSubject`,
-    addSubject: `${test}/subject/addSubject`,
-    updateSubject: `${test}/subject/updateSubject`,
-    dropSubject: `${test}/subject/dropSubject`,
+    getSubjects: `${target}/subject/selectSubjectList`,
+    getAllSubjects: `${target}/subject/selectAllSubject`,
+    addSubject: `${target}/subject/addSubject`,
+    updateSubject: `${target}/subject/updateSubject`,
+    dropSubject: `${target}/subject/dropSubject`,
+
+    // 用户管理
+    addUser: `${target}/userAdmin/adminAddUser`,
+    updateUser: `${target}/userAdmin/updateUser`,
+    getUser: `${target}/userAdmin/getUser`,
+    forbidUser: `${target}/userAdmin/forbidUser`,
+
 }
 export default APIS;

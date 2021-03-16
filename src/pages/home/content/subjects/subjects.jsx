@@ -27,6 +27,8 @@ class app extends Component {
             formData: {},
             currentPage: 1,
             pageSize: 10,
+            userId: window.localStorage.getItem('userId'),
+            type: window.localStorage.getItem('type'),
         }
     }
     componentDidMount(){
@@ -75,12 +77,21 @@ class app extends Component {
             {
                 title: '操作',
                 key: '',
-                render: (text, record) => (
-                    <Space size="middle">
-                        <a onClick={() =>{this.subjectManageModal('modify', record)}}>修改学科</a>
-                        <a onClick={() => {this.onDelSubject(record.subjectId)}}>删除学科</a>
-                    </Space>
-                ),
+                render: (text, record) => {
+                    const { userId, type } = this.state;
+                    return (  
+                        <Space size="middle">
+                            {
+                                (userId === record.userId || type === '1') ? 
+                                <>
+                                    <a onClick={() =>{this.subjectManageModal('modify', record)}}>修改学科</a>
+                                    <a onClick={() => {this.onDelSubject(record.subjectId)}}>删除学科</a>
+                                </>
+                                : '无'
+                            }
+                        </Space>
+                    )
+                }
             },
         ];   
     }
@@ -105,16 +116,23 @@ class app extends Component {
                     style: {marginTop: '30vh'},
                 });
             } else {
-                const { addSubject, subjectAddSuccess, getSubjects } = this.props;
-                addSubject(formData);
-                if (subjectAddSuccess) {
-                    const { formData } = this.state;
-                    const tempFormData = formData;
-                    tempFormData.subjectName = '';
-                    this.setState({
-                        formData: tempFormData,
-                    }, getSubjects({currentPage, pageSize}));
-                }
+                const { addSubject, getSubjects } = this.props;
+                addSubject({name: formData.subjectName});
+                setTimeout(()=>{
+                    const { subjectAddSuccess } = this.props;
+                    if (subjectAddSuccess) {
+                        const { formData } = this.state;
+                        const tempFormData = formData;
+                        tempFormData.subjectName = '';
+                        this.setState({
+                            formData: tempFormData,
+                        }, () => {
+                            console.log('添加成功');
+                            getSubjects({currentPage, pageSize});
+                        });
+                    }
+                }, 500);
+                
             }
         }
         if( type === 'modify'){
@@ -125,20 +143,24 @@ class app extends Component {
                     style: {marginTop: '30vh'},
                 });
             } else {
-                const { updateSubject, subjectUpdateSuccess, getSubjects } = this.props;
+                const { updateSubject, getSubjects } = this.props;
                 const tempData = {
-                    subjectName: formData.subjectName,
-                    subjectId: record.subjectId,
+                    name: formData.subjectName,
+                    id: record.subjectId,
                 };
                 updateSubject(tempData);
-                if (subjectUpdateSuccess) {
-                    const { formData } = this.state;
-                    const tempFormData = formData;
-                    tempFormData.subjectName = '';
-                    this.setState({
-                        formData: tempFormData,
-                    }, getSubjects({currentPage, pageSize}));
-                }
+                setTimeout(()=>{
+                    const { subjectUpdateSuccess } = this.props;
+                    if (subjectUpdateSuccess) {
+                        const { formData } = this.state;
+                        const tempFormData = formData;
+                        tempFormData.subjectName = '';
+                        this.setState({
+                            formData: tempFormData,
+                        }, getSubjects({currentPage, pageSize}));
+                    }
+                },500);
+               
             }
         }
     }
@@ -196,7 +218,7 @@ class app extends Component {
             onOk: () => {
                 const { dropSubject, getSubjects } = this.props;
                 const { currentPage, pageSize } = this.state;
-                dropSubject({subjectId: id});
+                dropSubject({id});
                 getSubjects({ currentPage, pageSize });
             },
             onCancel: () => {
