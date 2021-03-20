@@ -124,6 +124,7 @@ class app extends Component {
     // 确认添加或修改
     onOkModify = (type, record) => {
         const { modalFormDate, currentPage, pageSize } = this.state;
+        //TODO: 可以返回record，使用id回显
         if(type === 'add') {
             if(!Object.keys(modalFormDate).length || modalFormDate.pointName === '') {
                 message.error({
@@ -178,6 +179,7 @@ class app extends Component {
 
     // 添加或修改弹窗
     pointManageModal = (type, record) => {
+        console.log(record);
         const { modalFormDate } = this.state;
         const { subjectsList } = this.props;
         return (
@@ -198,13 +200,44 @@ class app extends Component {
                             <Select
                                 placeholder="请选择课程"
                                 value={modalFormDate.subjectName}
-                                onChange={ (e) => { this.handleChangeModalItem('subjectId', e)}}
+                                onChange={(e) => { this.handleChangeModalItem('subjectId', e)}}
                             >
                                 {
                                     subjectsList.map(item => (
                                         <Option value={item.subjectId}>{item.subjectName}</Option>
                                     ))
                                 }
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="所属章节"
+                            name="chapter"
+                        >
+                            <Select
+                                placeholder="请选择所属章节"
+                                value={modalFormDate.chapter}
+                                onChange={ (e) => { this.handleChangeModalItem('chapter', e)}}
+                            >
+                                <Option value={1}>第一章</Option>
+                                <Option value={2}>第二章</Option>
+                                <Option value={3}>第三章</Option>
+                                <Option value={4}>第四章</Option>
+                                <Option value={5}>第五章</Option>
+                                <Option value={6}>第六章</Option>
+                                <Option value={7}>第七章</Option>
+                                <Option value={8}>第八章</Option>
+                                <Option value={9}>第九章</Option>
+                                <Option value={10}>第十章</Option>
+                                <Option value={11}>第十一章</Option>
+                                <Option value={12}>第十二章</Option>
+                                <Option value={13}>第十三章</Option>
+                                <Option value={14}>第十四章</Option>
+                                <Option value={15}>第十五章</Option>
+                                <Option value={16}>第十六章</Option>
+                                <Option value={17}>第十七章</Option>
+                                <Option value={18}>第十八章</Option>
+                                <Option value={19}>第十九章</Option>
+                                <Option value={20}>第二十章</Option>
                             </Select>
                         </Form.Item>
                         <Form.Item
