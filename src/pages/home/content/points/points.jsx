@@ -45,10 +45,10 @@ class app extends Component {
     }
 
     componentDidMount(){
-        const { getPoints, getAllSubjects } = this.props;
+        const { getPoints, getSubjects } = this.props;
         const { pageSize, currentPage } = this.state;
-        getPoints({pageSize, currentPage});
-        getAllSubjects();
+        getPoints({pageSize, currentPage, userId: window.localStorage.getItem('userId')});
+        getSubjects();
     }
 
     getColumns = () => {
@@ -64,9 +64,14 @@ class app extends Component {
                 key: 'pointName',
             },
             {
-                title: '知识点所属学科',
+                title: '知识点所属课程',
                 dataIndex: 'subjectName',
                 key: 'subjectName',
+            },
+            {
+                title: '知识点所属章节',
+                dataIndex: 'chapter',
+                key: 'chapter',
             },
             {
                 title: '操作',
@@ -76,10 +81,10 @@ class app extends Component {
                     return (
                         <Space size="middle">
                             {
-                               (userId === record.userId || type === '1')  ?
+                               (+userId === record.userId || type === '1')  ?
                                 <>
-                                    <a onClick={ () => { this.pointManageModal('modify', record)}}>修改知识点</a>
-                                    <a onClick={() => {this.onDelPoint(record.pointId)}}>删除知识点</a>
+                                    <a onClick={ () => { this.pointManageModal('modify', record)}}>修改</a>
+                                    <a onClick={() => {this.onDelPoint(record.pointId, record.pointName)}}>删除</a>
                                 </>
                                 : '无'
                             }
@@ -104,7 +109,7 @@ class app extends Component {
     onSubmit = () => {
         const { currentPage, pageSize, formData } = this.state;
         const { getPoints } = this.props;
-        getPoints({...formData,currentPage, pageSize});
+        getPoints({...formData,currentPage, pageSize, userId: window.localStorage.getItem('userId')});
     }
 
     handleChangeModalItem = (filedName, value) => {
@@ -127,17 +132,21 @@ class app extends Component {
                     style: {marginTop: '30vh'},
                 });
             } else {
-                const { addPoint, pointAddSuccess, getPoints } = this.props;
-                addPoint(modalFormDate);
-                if (pointAddSuccess) {
-                    const { modalFormDate } = this.state;
-                    const tempFormData = modalFormDate;
-                    tempFormData.pointName = '';
-                    tempFormData.subjectId = '';
-                    this.setState({
-                        modalFormDate: tempFormData,
-                    }, getPoints({pageSize, currentPage}));
-                }
+                const { addPoint, getPoints } = this.props;
+                const tempParams = Object.assign({}, modalFormDate, { userId: window.localStorage.getItem('userId')});
+                addPoint(tempParams);
+                setTimeout(() => {
+                    const { pointAddSuccess } = this.props;
+                    if (pointAddSuccess) {
+                        const { modalFormDate } = this.state;
+                        const tempFormData = modalFormDate;
+                        tempFormData.pointName = '';
+                        tempFormData.subjectId = '';
+                        this.setState({
+                            modalFormDate: tempFormData,
+                        }, getPoints({pageSize, currentPage, userId: window.localStorage.getItem('userId')}));
+                    }
+                }, 500); 
             }
         }
         if( type === 'modify'){
@@ -149,17 +158,20 @@ class app extends Component {
                 });
             } else {
                 const tempModalFormDate = Object.assign({}, record, modalFormDate);
-                const { updatePoint, pointUpdateSuccess, getPoints } = this.props;
+                const { updatePoint, getPoints } = this.props;
                 updatePoint(tempModalFormDate);
-                if (pointUpdateSuccess) {
-                    const { modalFormDate } = this.state;
-                    const tempFormData = modalFormDate;
-                    tempFormData.pointName = '';
-                    tempFormData.subjectId = '';
-                    this.setState({
-                        modalFormDate: tempFormData,
-                    }, getPoints({pageSize, currentPage}));
-                }
+                setTimeout(() => {
+                    const { pointUpdateSuccess } = this.props;
+                    if (pointUpdateSuccess) {
+                        const { modalFormDate } = this.state;
+                        const tempFormData = modalFormDate;
+                        tempFormData.pointName = '';
+                        tempFormData.subjectId = '';
+                        this.setState({
+                            modalFormDate: tempFormData,
+                        }, getPoints({pageSize, currentPage, userId: window.localStorage.getItem('userId')}));
+                    }
+                }, 500);
             }
         }
     }
@@ -167,7 +179,7 @@ class app extends Component {
     // 添加或修改弹窗
     pointManageModal = (type, record) => {
         const { modalFormDate } = this.state;
-        const { subjectsAllList } = this.props; 
+        const { subjectsList } = this.props;
         return (
             confirm({
                 title: type === 'modify' ? '修改知识点' : '增加知识点',
@@ -180,16 +192,16 @@ class app extends Component {
                         initialValues={record}
                     >
                         <Form.Item
-                            label="知识点所属学科"
+                            label="知识点所属课程"
                             name="subjectId"
                         >
                             <Select
-                                placeholder="请选择学科"
+                                placeholder="请选择课程"
                                 value={modalFormDate.subjectName}
                                 onChange={ (e) => { this.handleChangeModalItem('subjectId', e)}}
                             >
                                 {
-                                    subjectsAllList.map(item => (
+                                    subjectsList.map(item => (
                                         <Option value={item.subjectId}>{item.subjectName}</Option>
                                     ))
                                 }
@@ -222,11 +234,11 @@ class app extends Component {
     }
 
     // 删除知识点
-    onDelPoint = (id) => {
+    onDelPoint = (id, name) => {
         confirm({
             title: '系统提示',
             icon: <ExclamationCircleOutlined />,
-            content: `确定要知识点${id}吗？`,
+            content: `确定要知识点${name}吗？`,
             style: { marginTop: 150 },
             okText: '确认',
             cancelText: '取消',
@@ -234,7 +246,7 @@ class app extends Component {
                 const { dropPoint, getPoints } = this.props;
                 const { currentPage, pageSize } = this.state;
                 dropPoint({ pointId: id });
-                getPoints({ currentPage, pageSize });
+                getPoints({ currentPage, pageSize, userId: window.localStorage.getItem('userId') });
             },
             onCancel: () => {
                 console.log('Cancel');
@@ -249,13 +261,13 @@ class app extends Component {
         }, () => {
             const { getPoints } = this.props;
             const { currentPage, pageSize } = this.state;
-            getPoints({currentPage, pageSize});
+            getPoints({currentPage, pageSize, userId: window.localStorage.getItem('userId')});
         });
     }
 
     render() {
         const { formData, modalFormDate, currentPage, pageSize } = this.state;
-        const { pointsList, totalPointsCount, subjectsAllList } = this.props;
+        const { pointsList, totalPointsCount, subjectsList } = this.props;
         return (
             <div style={{ padding: 10 }}>
                 <Card title={
@@ -274,7 +286,7 @@ class app extends Component {
                             layout="inline"
                         >
                             <Form.Item
-                                label="学科"
+                                label="课程"
                                 name="subjectId"
                             >
                                 <Select
@@ -284,7 +296,7 @@ class app extends Component {
                                     onChange={(e) => { this.handleChangeItem('subjectId', e)}}
                                 >
                                     {
-                                        subjectsAllList.map(item => (
+                                        subjectsList.map(item => (
                                             <Option value={item.subjectId} key={item.subjectId}>
                                                 {item.subjectName}
                                             </Option>
@@ -342,14 +354,15 @@ class app extends Component {
     }
 }
 
-
 const mapStateToProps = (state) => ({
     pointsList: state.points.pointsList,
     totalPointsCount: state.points.totalPointsCount,
-    subjectsAllList: state.subjects.subjectsAllList,
+    subjectsList: state.subjects.subjectsList,
+    pointUpdateSuccess: state.points.pointUpdateSuccess,
+    pointAddSuccess: state.points.pointAddSuccess,
 });
 const mapDispatchToProps = (dispatch) => ({
-    getAllSubjects: (params) => dispatch(subjects.getAllSubjects(params)),
+    getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: (params) => dispatch(points.getPoints(params)),
     addPoint: (params) => dispatch(points.addPoint(params)),
     updatePoint: (params) => dispatch(points.updatePoint(params)),

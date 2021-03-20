@@ -24,7 +24,10 @@ export default class app extends Component {
             disabled,
             type,
             require,
+            pointsList,
+            subjectsList,
         } = this.props;
+        console.log('formData', this.props)
         return (
             <div>
                 <Form
@@ -53,6 +56,7 @@ export default class app extends Component {
                                 {!type ? <Option value="all">全部</Option> : ''}
                                 <Option value="choice">单选题</Option>
                                 <Option value="judgement">判断题</Option>
+                                <Option value="multiple">多选题</Option>
                                 <Option value="blank">填空题</Option>
                                 <Option value="showAnswer">简答题</Option>
                             </Select>
@@ -60,7 +64,7 @@ export default class app extends Component {
                     </Form.Item>
 
                     <Form.Item
-                        label="学科"
+                        label="课程"
                         name="subject"
                         required={require}
                     >
@@ -71,14 +75,18 @@ export default class app extends Component {
                         >
                             <Select 
                                 style={{ width: 180 }}
-                                placeholder="请选择学科"
+                                placeholder="请选择课程"
                                 value={formData.subject || undefined}
                                 onChange={(e) => { handleChangeItem('subject', e)}}
                                 disabled={disabled}
                             >
-                                <Option value="1">数学</Option>
-                                <Option value="2">语文</Option>
-                                <Option value="3">英语</Option>
+                                {
+                                    subjectsList.map((item) => {
+                                        return (
+                                            <Option value={item.subjectId}>{item.subjectName}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </BaseForm>
                     </Form.Item>
@@ -98,11 +106,15 @@ export default class app extends Component {
                                 placeholder="请选择包含知识点"
                                 value={formData.knowledgePoints || undefined}
                                 onChange={(e) => { handleChangeItem('knowledgePoints', e)}}
-                                disabled={disabled}
+                                disabled={(!formData.subject? true : false) && (!type ? false : true)}
                             >
-                                <Option value="1">加法</Option>
-                                <Option value="2">减法</Option>
-                                <Option value="3">乘法</Option>
+                                {
+                                    pointsList.map((item) => {
+                                        return (
+                                            <Option value={item.pointId}>{item.pointName}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </BaseForm>
                     </Form.Item>

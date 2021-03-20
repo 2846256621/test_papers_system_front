@@ -89,7 +89,6 @@ const users = (state = {
     userForbidSuccess: false,
 }, action) => {
     switch (action.type) {
-
         case actionType.ADD_USER:
             state = Object.assign({}, state, {
                 userAddSuccess: action.userAddSuccess,

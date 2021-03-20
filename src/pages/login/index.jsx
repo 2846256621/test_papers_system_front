@@ -66,7 +66,7 @@ class app extends Component {
     onFinish = (values) => {
         const { verificationCode } = this.state;
         this.setState({
-            formData: {...values, type: 0, verificationCode},
+            formData: {...values, verificationCode},
         }, this.handleLogin);
     }
 
@@ -106,7 +106,7 @@ class app extends Component {
                 >
                     <Form.Item
                         label="用户名"
-                        name="usernName"
+                        name="userName"
                         rules={rules.userName}
                     >
                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入用户名" />
@@ -129,8 +129,8 @@ class app extends Component {
                             label="Radio.Group"
                             name="radio-group"
                         >
-                            <Radio value={1}>用户</Radio>
-                            <Radio value={2}>管理员</Radio>
+                            <Radio value={0}>用户</Radio>
+                            <Radio value={1}>管理员</Radio>
                         </Radio.Group>
                     </Form.Item>
                     

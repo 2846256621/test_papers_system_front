@@ -34,18 +34,18 @@ class app extends Component {
     componentDidMount(){
         const { getSubjects } = this.props;
         const { currentPage, pageSize} = this.state;
-        getSubjects({currentPage, pageSize});
+        getSubjects({currentPage, pageSize, userId: window.localStorage.getItem('userId')});
     }
 
     getColumns = () => {
         return [
             {
-                title: '学科ID',
+                title: '课程ID',
                 dataIndex: 'subjectId',
                 key: 'subjectId',
             },
             {
-                title: '学科名称',
+                title: '课程名称',
                 dataIndex: 'subjectName',
                 key: 'subjectName',
             },
@@ -82,10 +82,10 @@ class app extends Component {
                     return (  
                         <Space size="middle">
                             {
-                                (userId === record.userId || type === '1') ? 
+                                (+userId === record.userId || type === '1') ? 
                                 <>
-                                    <a onClick={() =>{this.subjectManageModal('modify', record)}}>修改学科</a>
-                                    <a onClick={() => {this.onDelSubject(record.subjectId)}}>删除学科</a>
+                                    <a onClick={() =>{this.subjectManageModal('modify', record)}}>修改</a>
+                                    <a onClick={() => {this.onDelSubject(record.subjectId)}}>删除</a>
                                 </>
                                 : '无'
                             }
@@ -117,7 +117,10 @@ class app extends Component {
                 });
             } else {
                 const { addSubject, getSubjects } = this.props;
-                addSubject({name: formData.subjectName});
+                addSubject({
+                    name: formData.subjectName,
+                    userId: window.localStorage.getItem('userId'),
+                });
                 setTimeout(()=>{
                     const { subjectAddSuccess } = this.props;
                     if (subjectAddSuccess) {
@@ -128,7 +131,7 @@ class app extends Component {
                             formData: tempFormData,
                         }, () => {
                             console.log('添加成功');
-                            getSubjects({currentPage, pageSize});
+                            getSubjects({currentPage, pageSize, userId: window.localStorage.getItem('userId')});
                         });
                     }
                 }, 500);
@@ -157,7 +160,7 @@ class app extends Component {
                         tempFormData.subjectName = '';
                         this.setState({
                             formData: tempFormData,
-                        }, getSubjects({currentPage, pageSize}));
+                        }, getSubjects({currentPage, pageSize, userId: window.localStorage.getItem('userId')}));
                     }
                 },500);
                
@@ -170,7 +173,7 @@ class app extends Component {
         const { formData } = this.state;
         return (
             confirm({
-                title: type === 'modify' ? '修改学科' : '增加学科',
+                title: type === 'modify' ? '修改课程' : '增加课程',
                 icon: <ExclamationCircleOutlined />,
                 content: (
                     <Form
@@ -179,11 +182,11 @@ class app extends Component {
                         initialValues={record}
                     >
                         <Form.Item
-                            label="学科名称"
+                            label="课程名称"
                             name="subjectName"
                         >
                             <Input
-                                placeholder="请输入学科名称"
+                                placeholder="请输入课程名称"
                                 value={formData.subjectName}
                                 onChange={ (e) => { this.handleChangeModalItem('subjectName', e.target.value)}}
                             />
@@ -204,9 +207,9 @@ class app extends Component {
     }
 
 
-    // 删除学科
+    // 删除课程
     onDelSubject = (id) => {
-        console.log('删除学科', this.props);
+        console.log('删除课程', this.props);
         confirm({
             title: '系统提示',
             icon: <ExclamationCircleOutlined />,
@@ -219,11 +222,24 @@ class app extends Component {
                 const { dropSubject, getSubjects } = this.props;
                 const { currentPage, pageSize } = this.state;
                 dropSubject({id});
-                getSubjects({ currentPage, pageSize });
+                getSubjects({ currentPage, pageSize, userId: window.localStorage.getItem('userId')});
             },
             onCancel: () => {
                 console.log('Cancel');
             },
+        });
+    }
+
+    // 查询课程
+    handleSelectSubject = (subjectName) => {
+        // TODO: 查询课程
+        const { getSubjects } = this.props;
+        const { currentPage, pageSize, formData } = this.state;
+        getSubjects({ subjectName, currentPage, pageSize, userId: window.localStorage.getItem('userId')});
+        const tempFormData = formData;
+        tempFormData.subjectName = '';
+        this.setState({
+            formData: tempFormData,
         });
     }
 
@@ -235,7 +251,7 @@ class app extends Component {
         }, () => {
             const { getSubjects } = this.props;
             const { currentPage, pageSize } = this.state;
-            getSubjects({currentPage, pageSize});
+            getSubjects({currentPage, pageSize, userId: window.localStorage.getItem('userId')});
         });
     }
 
@@ -249,18 +265,43 @@ class app extends Component {
                         <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>
                         <Breadcrumb.Item>后台管理</Breadcrumb.Item>
                         <Breadcrumb.Item>试题管理</Breadcrumb.Item>
-                        <Breadcrumb.Item>学科管理</Breadcrumb.Item>
+                        <Breadcrumb.Item>课程管理</Breadcrumb.Item>
                     </Breadcrumb>
                 }>
                     <Content
                         className="site-layout-background"
                     >
-                        <Button
-                            type="primary"
-                            onClick={ () => { this.subjectManageModal('add', formData) }}
+                        <Form
+                            name="basic"
+                            layout="inline"
                         >
-                            添加学科
-                        </Button>
+                            <Form.Item
+                                label="课程名称"
+                                name="subjectName"
+                            >
+                                <Input
+                                    placeholder="请输入课程名称"
+                                    value={formData.subjectName}
+                                    onChange={ (e) => { this.handleChangeModalItem('subjectName', e.target.value)}}
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    type="primary"
+                                    onClick={ () => { this.handleSelectSubject(formData.subjectName) }}
+                                >
+                                    查询
+                                </Button>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    type="primary"
+                                    onClick={ () => { this.subjectManageModal('add', formData) }}
+                                >
+                                    添加课程
+                                </Button>
+                            </Form.Item>
+                        </Form>
                         <Table
                             bordered
                             style={{ marginTop: 20 }}

@@ -38,12 +38,18 @@ const data = [{
     problemTypeScore: '',
 },{
     key: 3,
+    problemType: 'multiple',
+    problemTypeText: `多选题`,
+    problemTypeNum: '',
+    problemTypeScore: '',
+},{
+    key: 4,
     problemType: 'blank',
     problemTypeText: `填空题`,
     problemTypeNum: '',
     problemTypeScore: '',
 },{
-    key: 4,
+    key: 5,
     problemType: 'shotAnswer',
     problemTypeText: `简答题`,
     problemTypeNum: '',
@@ -61,8 +67,8 @@ class app extends Component {
     }
 
     componentDidMount(){
-        const { getAllSubjects } = this.props;
-        getAllSubjects();
+        const { getSubjects } = this.props;
+        getSubjects();
     }
 
     myForm = React.createRef('myForm');
@@ -234,7 +240,7 @@ class app extends Component {
 
     render() {
         const { selectedRowKeys, check, testPaperInfo } = this.state;
-        const { pointsAllList, subjectsAllList } = this.props;
+        const { pointsList, subjectsList } = this.props;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
@@ -332,7 +338,7 @@ class app extends Component {
                                             onChange={(e) => { this.onFieldsChange('subjectId', e)}}
                                         >
                                             {
-                                                subjectsAllList.map(item => (
+                                                subjectsList.map(item => (
                                                     <Option value={item.subjectId} key={item.subjectId}>
                                                         {item.subjectName}
                                                     </Option>
@@ -359,7 +365,7 @@ class app extends Component {
                                             disabled={!testPaperInfo.subjectId ? true : false}
                                         >
                                             {
-                                                pointsAllList.map(item => {
+                                                pointsList.map(item => {
                                                     return (
                                                         <Option value={item.id}>{item.pointName}</Option>
                                                     )
@@ -424,13 +430,13 @@ class app extends Component {
 }
 
 const mapStateToProps = state => ({
-    pointsAllList: state.points.pointsAllList,
-    subjectsAllList: state.subjects.subjectsAllList,
+    pointsList: state.points.pointsList,
+    subjectsList: state.subjects.subjectsList,
 });
  
 const mapDispatchToProps = dispatch => ({
-    getAllPoints: (params) => dispatch(points.getAllPoints(params)),
-    getAllSubjects: (params) => dispatch(subjects.getAllSubjects(params)),
+    getPoints: (params) => dispatch(points.getPoints(params)),
+    getSubjects: (params) => dispatch(subjects.getSubjects(params)),
 });
  
 export default WrappedComponent(connect(

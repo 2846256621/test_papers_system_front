@@ -31,32 +31,6 @@ const actions = {
         });
     },
 
-    getAllPoints: params => dispatch => {
-        const options = {
-            method: 'get',
-            api: APIS.getAllPoints,
-            params,
-        };
-        $ajax.common(options).then((res) => {
-            if (res.code === 10000) {
-                dispatch({
-                    type: actionType.GET_ALL_POINTS,
-                    pointsAllList: res.data,
-                });
-            } else {
-                message.error({
-                    content: res.message,
-                    className: 'custom-class',
-                    style: {marginTop: '30vh'},
-                });
-            }
-            return res;
-        }).catch((e) => {
-            console.log(e);
-        });
-    },
-
-
     addPoint: params => dispatch => {
         const options = {
             method: 'post',
@@ -121,7 +95,7 @@ const actions = {
 
     dropPoint: params => () => {
         const options = {
-            method: 'get',
+            method: 'post',
             api: APIS.dropPoint,
             params,
             contentType: 'json',

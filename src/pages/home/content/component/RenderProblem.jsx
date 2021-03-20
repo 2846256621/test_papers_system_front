@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     Input,
     Radio,
+    Checkbox,
 } from 'antd';
 
 const { TextArea } = Input;
@@ -14,7 +15,7 @@ export default class renderProblem extends Component {
 
         };
     }
-    
+
     render() {
         const {
             field,
@@ -36,6 +37,23 @@ export default class renderProblem extends Component {
                         <Radio value="C">C.{field.choiceOptionC}</Radio>
                         <Radio value="D">D.{field.choiceOptionD}</Radio>
                     </Radio.Group>
+                );
+                break;
+            case 'multiple':
+                nodeModal = (
+                    <Checkbox.Group
+                        value={field.answer}
+                        onChange={(e) => {
+                            onChangeItem('answer', e);
+                        }}
+                    >
+                        <Checkbox value="A">A</Checkbox>
+                        <Checkbox value="B">B</Checkbox>
+                        <Checkbox value="C">C</Checkbox>
+                        <Checkbox value="D">D</Checkbox>
+                        <Checkbox value="E">E</Checkbox>
+                        <Checkbox value="F">F</Checkbox>
+                    </Checkbox.Group>
                 );
                 break;
             case 'blank':

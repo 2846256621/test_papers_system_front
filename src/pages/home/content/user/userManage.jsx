@@ -63,14 +63,14 @@ class app extends Component {
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
-            onOk() {
+            onOk: () => {
                 // 确认之后，直接返回登录页
                 const { forbidUser } = this.props;
                 forbidUser();
                 setTimeout( () => {
                     const { userForbidSuccess } = this.props;
                     if (userForbidSuccess) {
-                        window.location.href = '/login';
+                        this.props.history.push('/login');
                     }
                 }, 500);
             },
@@ -201,8 +201,8 @@ class app extends Component {
                 const { userAddSuccess } = this.props;
                 if (userAddSuccess) {
                     const tempFormData = modalFormDate;
-                    tempFormData.username = '';
-                    tempFormData.password = '';
+                    tempFormData.userName = '';
+                    tempFormData.passWord = '';
                     this.setState({
                         modalFormDate: tempFormData,
                     }, () => {
@@ -220,8 +220,8 @@ class app extends Component {
                 const { userUpdateSuccess } = this.props;
                 if (userUpdateSuccess) {
                     const tempFormData = tempModalFormDate;
-                    tempFormData.username = '';
-                    tempFormData.password = '';
+                    tempFormData.userName = '';
+                    tempFormData.passWord = '';
                     this.setState({
                         modalFormDate: tempFormData,
                     }, () => {
@@ -247,22 +247,22 @@ class app extends Component {
                     >
                         <Form.Item
                             label={type === 'add' ? "初始用户名": "修改用户名"}
-                            name="username"
+                            name="userName"
                         >
                             <Input
                                 placeholder="请输入用户名"
-                                value={modalFormDate.username}
-                                onChange={ (e) => { this.handleChangeModalItem('username', e.target.value)}}
+                                value={modalFormDate.userName}
+                                onChange={ (e) => { this.handleChangeModalItem('userName', e.target.value)}}
                             />
                         </Form.Item>
                         <Form.Item
                             label={type === 'add' ? "初始密码": "重置密码"}
-                            name="password"
+                            name="passWord"
                         >
                             <Input
                                 placeholder="请输入密码"
-                                value={modalFormDate.password}
-                                onChange={ (e) => { this.handleChangeModalItem('password', e.target.value)}}
+                                value={modalFormDate.passWord}
+                                onChange={ (e) => { this.handleChangeModalItem('passWord', e.target.value)}}
                             />
                         </Form.Item>
                     </Form>
@@ -302,12 +302,12 @@ class app extends Component {
                         >
                             <Form.Item
                                 label="用户名"
-                                name="username"
+                                name="userName"
                             >
                                 <Input
                                     placeholder="请输入用户名"
-                                    value={modalFormDate.username}
-                                    onChange={ (e) => { this.handleChangeModalItem('username', e)}}
+                                    value={modalFormDate.userName}
+                                    onChange={ (e) => { this.handleChangeModalItem('userName', e)}}
                                 />
                             </Form.Item>
                             <Form.Item>
@@ -347,11 +347,13 @@ class app extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    userAddSuccess: state.users.usersAddSuccess,
-    userUpdateSuccess: state.users.usersUpdateSuccess,
-    userForbidSuccess: state.users.userForbidSuccess,
-})
+const mapStateToProps = (state) => {
+    return ({
+        userAddSuccess: state.users.userAddSuccess,
+        userUpdateSuccess: state.users.userUpdateSuccess,
+        userForbidSuccess: state.users.userForbidSuccess,
+    })
+}
 
 const mapDispatchToProps = (dispatch) => ({
     addUser: params => dispatch(user.addUser(params)),

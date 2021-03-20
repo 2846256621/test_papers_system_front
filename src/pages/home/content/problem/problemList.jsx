@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     Table,
     Tag,
@@ -10,6 +11,8 @@ import {
 } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
+import points from '../../../../store/actions/points';
+import subjects from '../../../../store/actions/subjects';
 import SearchProblem from './problemSearch';
 import { Link } from "react-router-dom";
 const { Content } = Layout;
@@ -69,6 +72,12 @@ class app extends Component {
             type: window.localStorage.getItem('type'),
         }
     }
+    
+    componentDidMount() {
+        const { getSubjects } = this.props;
+        getSubjects();
+    }
+
     // 删除题目
     onDelProblem = (id) => {
         confirm({
@@ -90,7 +99,7 @@ class app extends Component {
     getColumns = () => {
         return [
             {
-                title: '学科',
+                title: '课程',
                 dataIndex: 'subject',
                 key: 'subject',
                 render: text => <a>{text}</a>,
@@ -167,6 +176,12 @@ class app extends Component {
         this.setState({
             formData: tempFormDate,
         });
+        // TODO: 如果学科字段更新，则更新知识点。
+        if (filedName === 'subject') {
+            const { getPoints, getSubjects } = this.props;
+            getSubjects();
+            getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId') });
+        }
     }
 
     onSubmit = () => {
@@ -175,6 +190,7 @@ class app extends Component {
 
     render() {
         const { formData, check } = this.state;
+        const { subjectsList, pointsList } = this.props;
         return (
             <div style={{ padding: 10 }}>
                 <Card title={
@@ -194,6 +210,8 @@ class app extends Component {
                             formData={formData}
                             check={check}
                             require={false}
+                            subjectsList={subjectsList}
+                            pointsList={pointsList}
                         />
                         <Table
                             bordered
@@ -208,4 +226,17 @@ class app extends Component {
     }
 }
 
-export default WrappedComponent(app);
+const mapStateToProps = (state) => ({
+    subjectsList: state.subjects.subjectsList,
+    pointsList: state.points.pointsList,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    getSubjects: params => dispatch(subjects.getSubjects(params)),
+    getPoints: params => dispatch(points.getPoints(params)),
+})
+
+export default WrappedComponent(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(app));

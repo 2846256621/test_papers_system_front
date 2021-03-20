@@ -52,7 +52,7 @@ class app extends Component {
                                 </Card>
                             </Col>
                             <Col span={8}>
-                                <Card title="包含学科" extra={
+                                <Card title="包含课程" extra={
                                     <Link style={{ marginTop: 16 }} to="/subjectsList">
                                         进入查看
                                     </Link>

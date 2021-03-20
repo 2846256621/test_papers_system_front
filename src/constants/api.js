@@ -10,14 +10,12 @@ const APIS = {
 
     // 知识点管理
     getPoints: `${target}/point/selectPoint`,
-    getAllPoints: `${target}/point/selectAllPoint`,
     addPoint: `${target}/point/addPoint`,
     updatePoint: `${target}/point/updatePoint`,
     dropPoint: `${target}/point/dropPoint`,
 
-    // 学科管理
+    // 课程管理
     getSubjects: `${target}/subject/selectSubjectList`,
-    getAllSubjects: `${target}/subject/selectAllSubject`,
     addSubject: `${target}/subject/addSubject`,
     updateSubject: `${target}/subject/updateSubject`,
     dropSubject: `${target}/subject/dropSubject`,

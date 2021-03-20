@@ -4,31 +4,6 @@ import $ajax from '../../utils/ajax';
 import { message } from 'antd';
 
 const actions = {
-    
-    getAllSubjects: params => dispatch => {
-        const options = {
-            method: 'get',
-            api: APIS.getAllSubjects,
-            params,
-        };
-        $ajax.common(options).then((res) => {
-            if (res.code === 10000) {
-                dispatch({
-                    type: actionType.GET_ALL_SUBJECTS,
-                    subjectsAllList: res.data,
-                });
-            } else {
-                message.error({
-                    content: res.message,
-                    className: 'custom-class',
-                    style: {marginTop: '30vh'},
-                });
-            }
-            return res;
-        }).catch((e) => {
-            console.log(e);
-        });
-    },
 
     getSubjects: params => dispatch => {
         const options = {

@@ -76,7 +76,7 @@ class app extends Component {
                 width:250,
             },
             {
-                title: '所属学科',
+                title: '所属课程',
                 dataIndex: 'subject',
                 key: 'subject',
                 width:150,
@@ -136,8 +136,8 @@ class app extends Component {
                                 (userId === record.userId  || type === '1') ? 
                                  (
                                     <>
-                                        <a onClick={() => {this.onModifyTestPaper(record)}}>修改试卷</a>
-                                        <a onClick={() => {this.onDelTestPaper(record.id)}}>删除试卷</a>
+                                        <a onClick={() => {this.onModifyTestPaper(record)}}>修改</a>
+                                        <a onClick={() => {this.onDelTestPaper(record.id)}}>删除</a>
                                     </>
                                 ) : ''
                             }
@@ -297,12 +297,12 @@ class app extends Component {
                                 />
                             </Form.Item>
                             <Form.Item
-                                label="所属学科"
+                                label="所属课程"
                                 name="subject"
                             >
                                 <Select 
                                     style={{ width: 180 }}
-                                    placeholder="请选择学科"
+                                    placeholder="请选择课程"
                                     value={formData.subject}
                                     onChange={(e) => this.handleChangeItem('subject', e)}
                                 >

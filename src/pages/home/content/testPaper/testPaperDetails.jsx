@@ -48,6 +48,18 @@ class app extends Component {
                 score: 2,
                 answer: 'A',
             }, {
+                id: '5',
+                problemType: 'multiple',
+                problemText: '你的爱好有什么',
+                multipleOptionA: '吃饭',
+                multipleOptionB: '睡觉',
+                multipleOptionC: '上厕所',
+                multipleOptionD: '打游戏',
+                multipleOptionE: '出去玩',
+                multipleOptionF: '',
+                score: 5,
+                answer: 'A,B',
+            }, {
                 id: '2',
                 problemType: 'judgement',
                 problemText: '你是世界上最聪明的是吗？',
@@ -122,6 +134,7 @@ class app extends Component {
 
     onChangeItem = (filed, val) => {
         console.log('正确答案不允许修改');
+        return;
     }
 
     // 修改试卷
@@ -225,11 +238,11 @@ class app extends Component {
                             style={{ marginTop: 20}}
                             title="组卷结果"
                             extra={
-                                    <Button
-                                        type="primary"
-                                >
-                                    导出试卷
-                                </Button>
+                                <Button
+                                    type="primary"
+                            >
+                                保存试卷
+                            </Button>
                             }
                         >
                                 <Table
@@ -257,36 +270,37 @@ class app extends Component {
                                     pagination={false}
                                 />
                         </Card>
+                        <Alert
+                            style={{ marginTop: 10 }}
+                            message="题目信息仅为展示，不可修改。若要修改，请前往题目管理，进行修改。"
+                            type="warning"
+                            showIcon
+                            closable
+                        />
                         <Card
-                                title="题目信息"
-                                style={{ marginTop: 20}}
-                                extra={
-                                    <Button
-                                        type="primary"
-                                >
-                                    保存试卷
-                                </Button>
+                            title="题目信息"
+                            style={{ marginTop: 10}}
+                                
+                        >
+                            <Form>
+                                {
+                                    problemList.map(item => {
+                                        return(
+                                            <Form.Item
+                                                label=""
+                                                name={item.answer}
+                                                key={item.id}
+                                            >
+                                                {item.id}.{item.problemText} ({item.score}分)
+                                                <RenderProblem
+                                                    field={item}
+                                                    onChangeItem={this.onChangeItem}
+                                                />
+                                            </Form.Item>
+                                        )
+                                    })
                                 }
-                            >
-                                <Form>
-                                    {
-                                        problemList.map(item => {
-                                            return(
-                                                <Form.Item
-                                                    label=""
-                                                    name={item.answer}
-                                                    key={item.id}
-                                                >
-                                                    {item.id}.{item.problemText} ({item.score}分)
-                                                    <RenderProblem
-                                                        field={item}
-                                                        onChangeItem={this.onChangeItem}
-                                                    />
-                                                </Form.Item>
-                                            )
-                                        })
-                                    }
-                                </Form>
+                            </Form>
                         </Card>
                     </Content>
                 </Card>

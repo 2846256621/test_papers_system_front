@@ -9,6 +9,7 @@ const actions = {
             method: 'post',
             api: APIS.login,
             params: params.formData,
+            contentType: 'json',
         };
         $ajax.common(options).then((res) => {
             if (res.code === 10000) {
@@ -18,7 +19,7 @@ const actions = {
                     username: res.data.userName,
                     type: res.data.type,
                 });
-                window.localStorage.setItem('userId', res.data.userId);
+                window.localStorage.setItem('userId', res.data.id);
                 window.localStorage.setItem('username', res.data.userName);
                 window.localStorage.setItem('type', res.data.type); 
                 params.props.history.push('/home');

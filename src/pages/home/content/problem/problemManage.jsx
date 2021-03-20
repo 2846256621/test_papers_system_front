@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     Form,
     Button,
@@ -10,9 +11,13 @@ import {
     Layout,
     Radio,
     Card,
+    Checkbox,
+    Alert
 } from 'antd';
 import './index.css';
 import WrappedComponent from '../component/wrapComponent';
+import points from '../../../../store/actions/points';
+import subjects from '../../../../store/actions/subjects';
 import SearchProblem from './problemSearch';
 import BaseForm from '../component/BaseForm';
 
@@ -26,8 +31,9 @@ const layout = {
 const questionExample = {
     choice:'输入题目，形如--人体最大的细胞是()。注意需要考生答题部分用括号表示。',
     judgement: '输入题目，形如--计算机网络是一门很有意思的课程。注意需要考生答题部分用括号表示。',
-    blank: '输入题目，形如--从计算机网络系统组成的角度看，计算机网络可以分为____和____。注意需要考生答题部分用下划线表示。',
-    showAnswer: '输入题目，形如--你为什么喜欢计算机网络这门课程呢？'
+    blank: '输入题目，形如--从计算机网络系统组成的角度看，计算机网络可以分为()和()。注意需要考生答题部分用括号表示。',
+    showAnswer: '输入题目，形如--你为什么喜欢计算机网络这门课程呢？',
+    multiple: '输入题目，形如--你最喜欢的事情是()。注意需要考生答题部分用括号表示。'
 }
 
 class app extends Component {
@@ -45,6 +51,12 @@ class app extends Component {
                 choiceOptionB: '',
                 choiceOptionC: '',
                 choiceOptionD: '',
+                multipleOptionA: '',
+                multipleOptionB: '',
+                multipleOptionC: '',
+                multipleOptionD: '',
+                multipleOptionE: '',
+                multipleOptionF: '',
                 score:'',
             },
             check: {},
@@ -55,6 +67,7 @@ class app extends Component {
     }
 
     formRef = React.createRef();
+
     // 单选
     renderChoice = () => {
         const { formData, check, disable, required} = this.state;
@@ -170,6 +183,163 @@ class app extends Component {
         )
     }
 
+    // 多选
+    renderMultiple = () => {
+        const { formData, check, disable, required} = this.state;
+        return(
+            <div className="problems_layout">
+                <Form.Item
+                    label=""
+                    name="multipleOptionD"
+                    className="problems_layout"
+                    {...layout}
+                >
+                    <BaseForm
+                        warning={check.multipleOptionA}
+                        required={required}
+                    >
+                        <Tag color="green">选项</Tag>：输入选项内容
+                        <Alert
+                            style={{ width: '100%', marginTop: 10}}
+                            message="至少输入四个选项内容哦"
+                            type="warning"
+                            showIcon
+                            closable
+                        />
+                        <div key='A' className="problems_option_layout">
+                            <Tag color="blue">A</Tag>
+                            <Input
+                                className="problems_input_layout"
+                                placeholder={`请输入选项A的内容`}
+                                value={formData.multipleOptionA}
+                                onChange={(e) => {
+                                    this.handleChangeItem(`multipleOptionA`, e.target.value);
+                                }}
+                                disabled={disable}
+                            />
+                        </div>
+                    </BaseForm>
+                    
+                    <BaseForm
+                        warning={check.multipleOptionB}
+                        required={required}
+                    >
+                        <div key='B' className="problems_option_layout">
+                            <Tag color="blue">B</Tag>
+                            <Input
+                                className="problems_input_layout"
+                                placeholder={`请输入选项B的内容`}
+                                value={formData.multipleOptionB}
+                                onChange={(e) => {
+                                    this.handleChangeItem(`multipleOptionB`, e.target.value);
+                                }}
+                                disabled={disable}
+                            />
+                        </div>
+                    </BaseForm>
+                    
+                    <BaseForm
+                        warning={check.multipleOptionC}
+                        required={required}
+                    >
+                        <div key='C' className="problems_option_layout">
+                            <Tag color="blue">C</Tag>
+                            <Input
+                                className="problems_input_layout"
+                                placeholder={`请输入选项C的内容`}
+                                value={formData.multipleOptionC}
+                                onChange={(e) => {
+                                    this.handleChangeItem(`multipleOptionC`, e.target.value);
+                                }}
+                                disabled={disable}
+                            />
+                        </div>
+                    </BaseForm>
+                    
+                    <BaseForm
+                        warning={check.multipleOptionD}
+                        required={required}
+                    >
+                        <div key='D' className="problems_option_layout">
+                            <Tag color="blue">D</Tag>
+                            <Input
+                                className="problems_input_layout"
+                                placeholder={`请输入选项D的内容`}
+                                value={formData.multipleOptionD}
+                                onChange={(e) => {
+                                    this.handleChangeItem(`multipleOptionD`, e.target.value);
+                                }}
+                                disabled={disable}
+                            />
+                        </div>
+                    </BaseForm>
+                    <BaseForm
+                        warning={check.multipleOptionE}
+                        required={required}
+                    >
+                        <div key='E' className="problems_option_layout">
+                            <Tag color="blue">E</Tag>
+                            <Input
+                                className="problems_input_layout"
+                                placeholder={`请输入选项E的内容`}
+                                value={formData.multipleOptionE}
+                                onChange={(e) => {
+                                    this.handleChangeItem(`multipleOptionE`, e.target.value);
+                                }}
+                                disabled={disable}
+                            />
+                        </div>
+                    </BaseForm>
+                    <BaseForm
+                        warning={check.multipleOptionF}
+                        required={required}
+                    >
+                        <div key='E' className="problems_option_layout">
+                            <Tag color="blue">F</Tag>
+                            <Input
+                                className="problems_input_layout"
+                                placeholder={`请输入选项F的内容`}
+                                value={formData.multipleOptionF}
+                                onChange={(e) => {
+                                    this.handleChangeItem(`multipleOptionF`, e.target.value);
+                                }}
+                                disabled={disable}
+                            />
+                        </div>
+                    </BaseForm>
+                </Form.Item>
+                <Form.Item
+                    label=""
+                    name="answer"
+                    {...layout}
+                >
+                    <BaseForm
+                        warning={check.answer}
+                        required={required}
+                    >
+                        <Tag color="green">正确答案</Tag>：
+                        <Checkbox.Group
+                            style={{ marginLeft: 10 }}
+                            className="problems_input_layout"
+                            placeholder={`请输入的此题答案`}
+                            value={formData.answer}
+                            onChange={(e) => {
+                                this.handleChangeItem('answer', e);
+                            }}
+                            disabled={disable}
+                        >
+                            <Checkbox value="A">A</Checkbox>
+                            <Checkbox value="B">B</Checkbox>
+                            <Checkbox value="C">C</Checkbox>
+                            <Checkbox value="D">D</Checkbox>
+                            <Checkbox value="E">E</Checkbox>
+                            <Checkbox value="F">F</Checkbox>
+                        </Checkbox.Group>
+                    </BaseForm>
+                </Form.Item>
+            </div>
+        )
+    }
     // 填空
     renderBlank = () => {
         const { formData, check, disable, required } = this.state;
@@ -278,7 +448,9 @@ class app extends Component {
 
     componentDidMount() {
         const { type } = this.state;
+        const { getSubjects } = this.props;
         this.handleTypeInit(type);
+        getSubjects();
     }
 
     // 初始化
@@ -325,6 +497,12 @@ class app extends Component {
         this.setState({
             formData: tempFormDate,
         });
+        // TODO: 如果学科字段更新，则更新知识点。
+        if (filedName === 'subject') {
+            const { getPoints, getSubjects } = this.props;
+            getSubjects();
+            getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId') });
+        }
     }
 
     // 字段校验
@@ -338,6 +516,10 @@ class app extends Component {
             choiceOptionB,
             choiceOptionC,
             choiceOptionD,
+            multipleOptionA,
+            multipleOptionB,
+            multipleOptionC,
+            multipleOptionD,
             subject,
             difficultyLevel,
             knowledgePoints,
@@ -345,7 +527,7 @@ class app extends Component {
         } = formData;
         check.answer = !answer ? '请输入此题答案' : '';
         check.problemText = !problemText ? '请输入题目内容' : '';
-        check.subject = !subject ? '请选择学科' : '';
+        check.subject = !subject ? '请选择课程' : '';
         check.difficultyLevel = !difficultyLevel ? '请选择难度等级' : '';
         check.problemType = !problemType ? '请选择题目类型' : '';
         check.knowledgePoints = !knowledgePoints ? '请选择包含的知识点' : '';
@@ -356,6 +538,12 @@ class app extends Component {
             check.choiceOptionB = !choiceOptionB ? '请输入选项B的内容' : '';
             check.choiceOptionC = !choiceOptionC ? '请输入选项C的内容' : '';
             check.choiceOptionD = !choiceOptionD ? '请输入选项D的内容' : '';
+        }
+        if(problemType === 'multiple') {
+            check.multipleOptionA = !multipleOptionA ? '请输入选项A的内容' : '';
+            check.multipleOptionB = !multipleOptionB ? '请输入选项B的内容' : '';
+            check.multipleOptionC = !multipleOptionC ? '请输入选项C的内容' : '';
+            check.multipleOptionD = !multipleOptionD ? '请输入选项D的内容' : '';
         }
         this.setState({
             check,
@@ -380,6 +568,8 @@ class app extends Component {
                 return this.renderChoice();
             case 'judgement':
                 return this.renderJudgement();
+            case 'multiple':
+                return this.renderMultiple();
             case 'blank':
                 return this.renderBlank();
             case 'showAnswer':
@@ -390,8 +580,9 @@ class app extends Component {
     }
 
     render() {
-        const { formData, check, disable, required, type } = this.state;
+        const { formData, check, disable, required, type, isGetPoints } = this.state;
         const { problemType } = formData;
+        const { subjectsList, pointsList } = this.props;
         return (
             <div className="problem_container">
                 <Card title={
@@ -413,6 +604,8 @@ class app extends Component {
                             disabled={disable}
                             type={type}
                             require={required}
+                            subjectsList={subjectsList}
+                            pointsList={pointsList}
                         />
                         <Form
                             name="basic_template"
@@ -477,5 +670,17 @@ class app extends Component {
     }
 }
 
-export default WrappedComponent(app);
-// export default app;
+const mapStateToProps = (state) => ({
+    subjectsList: state.subjects.subjectsList,
+    pointsList: state.points.pointsList,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    getSubjects: params => dispatch(subjects.getSubjects(params)),
+    getPoints: params => dispatch(points.getPoints(params)),
+})
+
+export default WrappedComponent(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(app));
