@@ -5,7 +5,7 @@ const APIS = {
     // 登录注册
     verificationCode: `${target}/users/createCode`,
     userRegister:`${target}/users/userRegister`,
-    getUserList:`${target}/userAdmin/getUserList`,
+    modifyUser: `${target}/users/updateUser`,
     login:`${target}/users/userLogin`,
 
     // 知识点管理
@@ -25,6 +25,7 @@ const APIS = {
     updateUser: `${target}/userAdmin/updateUser`,
     getUser: `${target}/userAdmin/getUser`,
     forbidUser: `${target}/userAdmin/forbidUser`,
+    getUserList:`${target}/userAdmin/getUserList`,
 
 }
 export default APIS;

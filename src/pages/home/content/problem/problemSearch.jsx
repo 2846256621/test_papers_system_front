@@ -102,7 +102,9 @@ export default class app extends Component {
                             requireStyle
                         >
                             <Select
-                                style={{ width: 180 }}
+                                style={{ width: 240 }}
+                                mode="multiple"
+                                optionLabelProp="label"
                                 placeholder="请选择包含知识点"
                                 value={formData.knowledgePoints || undefined}
                                 onChange={(e) => { handleChangeItem('knowledgePoints', e)}}
@@ -111,7 +113,16 @@ export default class app extends Component {
                                 {
                                     pointsList.map((item) => {
                                         return (
-                                            <Option value={item.pointId}>{item.pointName}</Option>
+                                            <Option value={item.pointId} label={item.pointName}>
+                                                <div className="demo-option-label-item">
+                                                    <span role="img" aria-label={item.pointName}>
+                                                        {item.pointName}
+                                                    </span>
+                                                    <span style={{ float: 'right'}}>
+                                                        ({item.chapter})
+                                                    </span>
+                                                </div>
+                                            </Option>
                                         )
                                     })
                                 }

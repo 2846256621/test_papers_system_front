@@ -58,9 +58,10 @@ const actions = {
     },
     forbidUser: params => dispatch => {
         const options = {
-            method: 'get',
+            method: 'post',
             api: APIS.forbidUser,
             params: params,
+            contentType: 'json',
         };
         $ajax.common(options).then((res) => {
             if (res.code === 10000) {
@@ -68,6 +69,32 @@ const actions = {
                 dispatch({
                     type: actionType.FORBID_USER,
                     userForbidSuccess: true,
+                });
+            } else {
+                message.error({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+        })
+    },
+    modifyUser: params => dispatch => {
+        const options = {
+            method: 'post',
+            api: APIS.modifyUser,
+            params: params,
+            contentType: 'json',
+        };
+        $ajax.common(options).then((res) => {
+            if (res.code === 10000) {
+                message.success(res.message);
+                dispatch({
+                    type: actionType.MODIFY_USER,
+                    userModifySuccess: true,
                 });
             } else {
                 message.error({

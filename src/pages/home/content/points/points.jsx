@@ -151,14 +151,17 @@ class app extends Component {
             }
         }
         if( type === 'modify'){
-            if(!Object.keys(modalFormDate).length || modalFormDate.pointName === '') {
-                message.error({
-                    content: '未修改，不得保存',
-                    className: 'custom-class',
-                    style: {marginTop: '30vh'},
-                });
-            } else {
+            // if(!Object.keys(modalFormDate).length || modalFormDate.pointName === '' || modalFormDate.chapter === '') {
+            //     message.error({
+            //         content: '未修改，不得保存',
+            //         className: 'custom-class',
+            //         style: {marginTop: '30vh'},
+            //     });
+            // } else {
                 const tempModalFormDate = Object.assign({}, record, modalFormDate);
+                console.log("填写数据",modalFormDate);
+                console.log("原始数据",record);
+                console.log("合成数据",tempModalFormDate);
                 const { updatePoint, getPoints } = this.props;
                 updatePoint(tempModalFormDate);
                 setTimeout(() => {
@@ -173,7 +176,7 @@ class app extends Component {
                         }, getPoints({pageSize, currentPage, userId: window.localStorage.getItem('userId')}));
                     }
                 }, 500);
-            }
+            // }
         }
     }
 
@@ -195,16 +198,16 @@ class app extends Component {
                     >
                         <Form.Item
                             label="知识点所属课程"
-                            name="subjectId"
+                            name="subjectName"
                         >
                             <Select
                                 placeholder="请选择课程"
                                 value={modalFormDate.subjectName}
-                                onChange={(e) => { this.handleChangeModalItem('subjectId', e)}}
+                                onChange={(e) => { this.handleChangeModalItem('subjectId', this.handleSelectPointId(e))}}
                             >
                                 {
                                     subjectsList.map(item => (
-                                        <Option value={item.subjectId}>{item.subjectName}</Option>
+                                        <Option value={item.subjectName}>{item.subjectName}</Option>
                                     ))
                                 }
                             </Select>
@@ -218,26 +221,26 @@ class app extends Component {
                                 value={modalFormDate.chapter}
                                 onChange={ (e) => { this.handleChangeModalItem('chapter', e)}}
                             >
-                                <Option value={1}>第一章</Option>
-                                <Option value={2}>第二章</Option>
-                                <Option value={3}>第三章</Option>
-                                <Option value={4}>第四章</Option>
-                                <Option value={5}>第五章</Option>
-                                <Option value={6}>第六章</Option>
-                                <Option value={7}>第七章</Option>
-                                <Option value={8}>第八章</Option>
-                                <Option value={9}>第九章</Option>
-                                <Option value={10}>第十章</Option>
-                                <Option value={11}>第十一章</Option>
-                                <Option value={12}>第十二章</Option>
-                                <Option value={13}>第十三章</Option>
-                                <Option value={14}>第十四章</Option>
-                                <Option value={15}>第十五章</Option>
-                                <Option value={16}>第十六章</Option>
-                                <Option value={17}>第十七章</Option>
-                                <Option value={18}>第十八章</Option>
-                                <Option value={19}>第十九章</Option>
-                                <Option value={20}>第二十章</Option>
+                                <Option value={"第一章"}>第一章</Option>
+                                <Option value={"第二章"}>第二章</Option>
+                                <Option value={"第三章"}>第三章</Option>
+                                <Option value={"第四章"}>第四章</Option>
+                                <Option value={"第五章"}>第五章</Option>
+                                <Option value={"第六章"}>第六章</Option>
+                                <Option value={"第七章"}>第七章</Option>
+                                <Option value={"第八章"}>第八章</Option>
+                                <Option value={"第九章"}>第九章</Option>
+                                <Option value={"第十章"}>第十章</Option>
+                                <Option value={"第十一章"}>第十一章</Option>
+                                <Option value={"第十二章"}>第十二章</Option>
+                                <Option value={"第十三章"}>第十三章</Option>
+                                <Option value={"第十四章"}>第十四章</Option>
+                                <Option value={"第十五章"}>第十五章</Option>
+                                <Option value={"第十六章"}>第十六章</Option>
+                                <Option value={"第十七章"}>第十七章</Option>
+                                <Option value={"第十八章"}>第十八章</Option>
+                                <Option value={"第十九章"}>第十九章</Option>
+                                <Option value={"第二十章"}>第二十章</Option>
                             </Select>
                         </Form.Item>
                         <Form.Item
@@ -264,6 +267,19 @@ class app extends Component {
                 },
             })      
         )
+    }
+
+    // 根据知识点名称匹配知识点id
+    handleSelectPointId = (name) => {
+        const { subjectsList } = this.props;
+        console.log(subjectsList);
+        let id = "";
+        subjectsList.forEach(item => {
+            if(item.subjectName === name){
+                id = item.subjectId;
+            }
+        });
+        return id;
     }
 
     // 删除知识点

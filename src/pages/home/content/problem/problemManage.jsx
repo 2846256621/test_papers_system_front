@@ -58,6 +58,7 @@ class app extends Component {
                 multipleOptionE: '',
                 multipleOptionF: '',
                 score:'',
+                userId: window.localStorage.getItem('userId'),
             },
             check: {},
             disable: false,
@@ -481,14 +482,6 @@ class app extends Component {
         console.log('获取表单。获取表单');
     }
 
-    // 更新对应模板
-    onValuesChange = (changedValues, allValues) =>{
-        console.log('更新字段', changedValues, allValues);
-        this.setState({
-            formData: allValues,
-        }, this.renderFormItem);
-    }
-
     // 更新字段
     handleChangeItem = (filedName, value) => {
         console.log('filedName, value', filedName, value)
@@ -501,7 +494,7 @@ class app extends Component {
         if (filedName === 'subject') {
             const { getPoints, getSubjects } = this.props;
             getSubjects();
-            getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId') });
+            getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId'), subjectId: value });
         }
     }
 

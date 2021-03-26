@@ -14,4 +14,5 @@ export default {
     ADD_USER: 'ADD_USER',
     UPDATE_USER: 'UPDATE_USER',
     FORBID_USER: 'FORBID_USER',
+    MODIFY_USER: 'MODIFY_USER',
 }

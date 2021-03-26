@@ -235,7 +235,7 @@ class app extends Component {
         // TODO: 查询课程
         const { getSubjects } = this.props;
         const { currentPage, pageSize, formData } = this.state;
-        getSubjects({ subjectName, currentPage, pageSize, userId: window.localStorage.getItem('userId')});
+        getSubjects({ name:subjectName, currentPage, pageSize, userId: window.localStorage.getItem('userId')});
         const tempFormData = formData;
         tempFormData.subjectName = '';
         this.setState({

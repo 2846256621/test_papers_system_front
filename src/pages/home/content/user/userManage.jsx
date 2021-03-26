@@ -58,7 +58,7 @@ class app extends Component {
         confirm({
             title: '系统提示',
             icon: <ExclamationCircleOutlined />,
-            content: `用户将不能再登录系统，确定要${auth ? '启用' : '禁用'}用户${id}吗？`,
+            content:`注意禁用后用户将不能再登录系统，启用后可继续使用确定要${auth ? '启用' : '禁用'}用户${id}吗？`,
             style: { marginTop: 150 },
             okText: '确认',
             okType: 'danger',
@@ -66,11 +66,11 @@ class app extends Component {
             onOk: () => {
                 // 确认之后，直接返回登录页
                 const { forbidUser } = this.props;
-                forbidUser();
+                forbidUser({id, status: +(!auth)});
                 setTimeout( () => {
                     const { userForbidSuccess } = this.props;
                     if (userForbidSuccess) {
-                        this.props.history.push('/login');
+                        this.handleGetUserList();
                     }
                 }, 500);
             },
@@ -119,8 +119,8 @@ class app extends Component {
                         <a onClick={() => {this.onDisableUser(record.id, record.status)}}>
                             {
                                 record.status ?
-                                '禁用' :
-                                '启用' 
+                                '启用' :
+                                '禁用' 
                             }
                         </a>
                     </Space>

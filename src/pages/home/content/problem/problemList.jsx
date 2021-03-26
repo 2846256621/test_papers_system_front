@@ -180,7 +180,7 @@ class app extends Component {
         if (filedName === 'subject') {
             const { getPoints, getSubjects } = this.props;
             getSubjects();
-            getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId') });
+            getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId'), subjectId: value });
         }
     }
 

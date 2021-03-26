@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     Table,
     Form,
@@ -9,9 +10,11 @@ import {
     Input,
     Button,
     Card,
-    Modal,
+    message,
+    Alert,
 } from 'antd';
-import WrapComponent  from '../component/wrapComponent';
+import user from '../../../../store/actions/user';
+import WrappedComponent from '../component/wrapComponent';
 const { Content } = Layout;
 const layout = {
     labelCol: { span: 6 },
@@ -31,6 +34,16 @@ class app extends Component {
 
     onFinish = (values) => {
         console.log('Success:', values);
+        const { passwordDisabled } = this.state;
+        if(!passwordDisabled && (values.againPassword !== values.passWord)){
+            message.error({
+                content: '输入密码不一致，请重新输入',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+            values = "";
+        }
+        this.savePersonChange(values);
       };
     
     onFinishFailed = (errorInfo) => {
@@ -38,8 +51,25 @@ class app extends Component {
     };
 
     // 保存修改
-    savePersonChange = () => {
-
+    savePersonChange = (values) => {
+        const { modifyUser } = this.props;
+        console.log("values,|||", values);
+        if (values) {
+            modifyUser({...values, id: window.localStorage.getItem('userId')});
+            setTimeout( () => {
+                const { userModifySuccess } = this.props;
+                if(userModifySuccess) {
+                    this.setState({
+                        usernameDisabled: true,
+                        passwordDisabled: true,
+                    })
+                }
+                window.localStorage.removeItem('username');
+                window.localStorage.removeItem('userId');
+                window.localStorage.removeItem('type');
+                this.props.history.push('/login');
+            }, 500);
+        }
     }
 
     // 取消保存
@@ -96,11 +126,17 @@ class app extends Component {
                                 </Space>
                             }
                         >
+                            <Alert
+                                message="注意修改个人信息之后，会退出系统需重新登录"
+                                type="warning"
+                                showIcon
+                                closable
+                            />
                             <Form
                                 {...layout}
                                 name="basic"
-                                layout="horizontal"
-                                style={{ width: '70%' }}
+                                layout="Vertical"
+                                style={{ width: '70%', marginTop: 40 }}
                                 className="person-form"
                                 onFinish={this.onFinish}
                                 onFinishFailed={this.onFinishFailed}
@@ -108,17 +144,18 @@ class app extends Component {
                             >
                                 <Form.Item
                                     label="用户名"
-                                    name="username"
+                                    name="userName"
                                     rules={[{ required: !this.state.usernameDisabled, message: '请输入新用户名' }]}
                                 >
                                     <Input
                                         placeholder="请输入新用户名"
+                                        defaultValue={window.localStorage.getItem('username')}
                                         disabled={usernameDisabled}
                                     />
                                 </Form.Item>
                                 <Form.Item
                                     label="密码"
-                                    name="password"
+                                    name="passWord"
                                     rules={[{ required: !this.state.passwordDisabled, message: '请输入新密码' }]}
                                 >
                                     <Input
@@ -162,4 +199,17 @@ class app extends Component {
         )
     }
 }
-export default WrapComponent(app);
+const mapStateToProps = (state) => {
+    return ({
+        userModifySuccess: state.users.userModifySuccess,
+    })
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    modifyUser: params => dispatch(user.modifyUser(params)),
+})
+
+export default WrappedComponent(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(app));

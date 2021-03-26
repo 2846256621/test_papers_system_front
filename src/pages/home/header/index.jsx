@@ -15,7 +15,7 @@ export default class app extends Component {
         window.localStorage.removeItem('userId');
         window.localStorage.removeItem('username');
         window.localStorage.removeItem('type');
-        // this.props.history.push('/login');
+        this.props.history.push('/login');
     }
 
     render() {
