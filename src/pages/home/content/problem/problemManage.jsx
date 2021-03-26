@@ -12,12 +12,14 @@ import {
     Radio,
     Card,
     Checkbox,
-    Alert
+    Alert,
+    message
 } from 'antd';
 import './index.css';
 import WrappedComponent from '../component/wrapComponent';
 import points from '../../../../store/actions/points';
 import subjects from '../../../../store/actions/subjects';
+import problem from '../../../../store/actions/problem';
 import SearchProblem from './problemSearch';
 import BaseForm from '../component/BaseForm';
 
@@ -60,6 +62,7 @@ class app extends Component {
                 score:'',
                 userId: window.localStorage.getItem('userId'),
             },
+            formDataTemp: {},
             check: {},
             disable: false,
             required: true,
@@ -448,8 +451,12 @@ class app extends Component {
     }
 
     componentDidMount() {
-        const { type } = this.state;
+        const { type, formData } = this.state;
         const { getSubjects } = this.props;
+        console.log('formDataTemp |||||', this.state.formDataTemp);
+        this.setState({
+            formDataTemp: formData,
+        });
         this.handleTypeInit(type);
         getSubjects();
     }
@@ -548,8 +555,21 @@ class app extends Component {
     onSubmit = () => {
         const check = this.onCheck();
         if (Object.values(check).filter((item) => !!item).length > 0) return null;
-        this.formRef.current.submit();
+        // this.formRef.current.submit();
         console.log('submit提交表单',this.state.formData);
+        const { addProblem } = this.props;
+        const { formData } = this.state;
+        addProblem({...formData, answer: formData.answer.toString()});
+        setTimeout(() => {
+            const { problemAddSuccess } = this.props;
+            if(problemAddSuccess) {
+                // message('添加成功');
+                const { formDataTemp } = this.state;
+                this.setState({
+                    formData: formDataTemp
+                });
+            }
+        }, 500);
     }
     
     // 渲染不同模板
@@ -666,11 +686,13 @@ class app extends Component {
 const mapStateToProps = (state) => ({
     subjectsList: state.subjects.subjectsList,
     pointsList: state.points.pointsList,
+    problemAddSuccess: state.problem.problemAddSuccess,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: params => dispatch(points.getPoints(params)),
+    addProblem: params => dispatch(problem.addProblem(params)),
 })
 
 export default WrappedComponent(connect(

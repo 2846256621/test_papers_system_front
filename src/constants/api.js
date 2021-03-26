@@ -27,5 +27,7 @@ const APIS = {
     forbidUser: `${target}/userAdmin/forbidUser`,
     getUserList:`${target}/userAdmin/getUserList`,
 
+    // 题目管理
+    addProblem: `${target}/problem/addProblem`,
 }
 export default APIS;

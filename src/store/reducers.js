@@ -114,9 +114,26 @@ const users = (state = {
             return state;
     }
 }
+
+const problem = (state = {
+    problemAddSuccess: false,
+}, action) => {
+    switch (action.type) {
+        case actionType.ADD_PROBLEM:
+            state = Object.assign({}, state, {
+                problemAddSuccess: action.problemAddSuccess,
+            });
+            return state;
+       
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     login,
     points,
     subjects,
     users,
+    problem,
 });

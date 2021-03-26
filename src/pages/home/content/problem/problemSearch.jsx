@@ -6,6 +6,7 @@ import {
     Select,
     Button,
     Input,
+    InputNumber,
 } from 'antd';
 import './index.css';
 const { Option } = Select;
@@ -140,24 +141,13 @@ export default class app extends Component {
                             required={require}
                             requireStyle
                         >
-                            {/* <Select
-                                style={{ width: 180 }}
-                                placeholder="请选择难度等级"
-                                value={formData.difficultyLevel || undefined}
-                                onChange={(e) => { handleChangeItem('difficultyLevel', e)}}
-                                disabled={disabled}
-                            >
-                                <Option value="1">1</Option>
-                                <Option value="2">2</Option>
-                                <Option value="3">2</Option>
-                                <Option value="4">4</Option>
-                                <Option value="5">5</Option>
-                            </Select> */}
-                            <Input
+                            <InputNumber
+                                min={0.1}
+                                max={1}
                                 style={{ width: 180 }}
                                 placeholder="请输入难度等级（0~1）"
                                 value={formData.difficultyLevel || undefined}
-                                onChange={(e) => { handleChangeItem('difficultyLevel', e.target.value)}}
+                                onChange={(e) => { handleChangeItem('difficultyLevel', e)}}
                                 disabled={disabled}
                             />
                         </BaseForm>
@@ -182,9 +172,15 @@ export default class app extends Component {
                             >
                                 <Option value="1">1</Option>
                                 <Option value="2">2</Option>
-                                <Option value="3">2</Option>
+                                <Option value="3">3</Option>
                                 <Option value="4">4</Option>
                                 <Option value="5">5</Option>
+                                <Option value="6">6</Option>
+                                <Option value="7">7</Option>
+                                <Option value="8">8</Option>
+                                <Option value="9">9</Option>
+                                <Option value="10">10</Option>
+                                <Option value="20">20</Option>
                             </Select>
                         </BaseForm>
                     </Form.Item>
