@@ -51,6 +51,7 @@ export default class app extends Component {
                             <Select
                                 style={{ width: 180 }}
                                 value={formData.problemType || undefined}
+                                defaultValue="all"
                                 onChange={(e) => { handleChangeItem('problemType', e)}}
                                 disabled={disabled}
                             >
@@ -59,7 +60,7 @@ export default class app extends Component {
                                 <Option value="judgement">判断题</Option>
                                 <Option value="multiple">多选题</Option>
                                 <Option value="blank">填空题</Option>
-                                <Option value="showAnswer">简答题</Option>
+                                <Option value="shortAnswer">简答题</Option>
                             </Select>
                         </BaseForm>
                     </Form.Item>
@@ -81,6 +82,7 @@ export default class app extends Component {
                                 onChange={(e) => { handleChangeItem('subject', e)}}
                                 disabled={disabled}
                             >
+                                {!type ? <Option value="">全部</Option> : ''} 
                                 {
                                     subjectsList.map((item) => {
                                         return (

@@ -19,7 +19,7 @@ import './index.css';
 import WrappedComponent from '../component/wrapComponent';
 import points from '../../../../store/actions/points';
 import subjects from '../../../../store/actions/subjects';
-import problem from '../../../../store/actions/problem';
+import problems from '../../../../store/actions/problems';
 import SearchProblem from './problemSearch';
 import BaseForm from '../component/BaseForm';
 
@@ -34,7 +34,7 @@ const questionExample = {
     choice:'输入题目，形如--人体最大的细胞是()。注意需要考生答题部分用括号表示。',
     judgement: '输入题目，形如--计算机网络是一门很有意思的课程。注意需要考生答题部分用括号表示。',
     blank: '输入题目，形如--从计算机网络系统组成的角度看，计算机网络可以分为()和()。注意需要考生答题部分用括号表示。',
-    showAnswer: '输入题目，形如--你为什么喜欢计算机网络这门课程呢？',
+    shortAnswer: '输入题目，形如--你为什么喜欢计算机网络这门课程呢？',
     multiple: '输入题目，形如--你最喜欢的事情是()。注意需要考生答题部分用括号表示。'
 }
 
@@ -555,7 +555,6 @@ class app extends Component {
     onSubmit = () => {
         const check = this.onCheck();
         if (Object.values(check).filter((item) => !!item).length > 0) return null;
-        // this.formRef.current.submit();
         console.log('submit提交表单',this.state.formData);
         const { addProblem } = this.props;
         const { formData } = this.state;
@@ -563,7 +562,6 @@ class app extends Component {
         setTimeout(() => {
             const { problemAddSuccess } = this.props;
             if(problemAddSuccess) {
-                // message('添加成功');
                 const { formDataTemp } = this.state;
                 this.setState({
                     formData: formDataTemp
@@ -585,7 +583,7 @@ class app extends Component {
                 return this.renderMultiple();
             case 'blank':
                 return this.renderBlank();
-            case 'showAnswer':
+            case 'shortAnswer':
                 return this.renderShotAnswer();
             default:
                 return null;
@@ -686,13 +684,13 @@ class app extends Component {
 const mapStateToProps = (state) => ({
     subjectsList: state.subjects.subjectsList,
     pointsList: state.points.pointsList,
-    problemAddSuccess: state.problem.problemAddSuccess,
+    problemAddSuccess: state.problems.problemAddSuccess,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: params => dispatch(points.getPoints(params)),
-    addProblem: params => dispatch(problem.addProblem(params)),
+    addProblem: params => dispatch(problems.addProblem(params)),
 })
 
 export default WrappedComponent(connect(

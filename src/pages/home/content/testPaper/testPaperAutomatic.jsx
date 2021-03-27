@@ -50,7 +50,7 @@ const data = [{
     problemTypeScore: '',
 },{
     key: 5,
-    problemType: 'shotAnswer',
+    problemType: 'shortAnswer',
     problemTypeText: `简答题`,
     problemTypeNum: '',
     problemTypeScore: '',

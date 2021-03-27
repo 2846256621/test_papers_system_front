@@ -81,7 +81,7 @@ export default class renderProblem extends Component {
                     </Radio.Group>
                 );
                 break;
-            case 'shotAnswer':
+            case 'shortAnswer':
                 nodeModal = (
                     <TextArea
                         style={{ marginTop: 5 , width: '80%'}}

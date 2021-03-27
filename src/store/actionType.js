@@ -17,4 +17,5 @@ export default {
     MODIFY_USER: 'MODIFY_USER',
 
     ADD_PROBLEM: 'ADD_PROBLEM',
+    GET_ALL_PROBLRM: 'GET_ALL_PROBLRM',
 }

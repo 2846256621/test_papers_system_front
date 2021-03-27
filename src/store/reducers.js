@@ -115,8 +115,10 @@ const users = (state = {
     }
 }
 
-const problem = (state = {
+const problems = (state = {
     problemAddSuccess: false,
+    problemList: [],
+    totalProblemsCount: 0,
 }, action) => {
     switch (action.type) {
         case actionType.ADD_PROBLEM:
@@ -124,7 +126,12 @@ const problem = (state = {
                 problemAddSuccess: action.problemAddSuccess,
             });
             return state;
-       
+        case actionType.GET_ALL_PROBLRM:
+            state = Object.assign({}, state, {
+                problemList: action.problemList,
+                totalProblemsCount: action.totalProblemsCount,
+            });
+            return state;
         default:
             return state;
     }
@@ -135,5 +142,5 @@ export default combineReducers({
     points,
     subjects,
     users,
-    problem,
+    problems,
 });

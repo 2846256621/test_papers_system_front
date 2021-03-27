@@ -73,7 +73,7 @@ class app extends Component {
                 answer: '优秀、聪明',
             },{
                 id: '4',
-                problemType: 'shotAnswer',
+                problemType: 'shortAnswer',
                 problemText: '你为什么感觉到幸福呢',
                 score: 6,
                 answer: '因为年年有今日，岁岁有今朝',

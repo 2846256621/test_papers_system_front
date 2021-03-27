@@ -36,5 +36,31 @@ const actions = {
         });
     },
 
+    getAllProblem: params => dispatch => {
+        const options = {
+            method: 'post',
+            api: APIS.getProblemList,
+            params,
+            contentType: 'json',
+        };
+        $ajax.common(options).then((res) => {
+            if (res.code === 10000) {
+                dispatch({
+                    type: actionType.GET_ALL_PROBLRM,
+                    problemList: res.data.dataList,
+                    totalProblemsCount: res.data.totalCount,
+                });
+            } else {
+                message.error({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+        });
+    },
 }
 export default actions;

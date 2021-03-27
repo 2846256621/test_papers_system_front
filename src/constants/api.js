@@ -29,5 +29,6 @@ const APIS = {
 
     // 题目管理
     addProblem: `${target}/problem/addProblem`,
+    getProblemList: `${target}/problem/selectProblem`,
 }
 export default APIS;

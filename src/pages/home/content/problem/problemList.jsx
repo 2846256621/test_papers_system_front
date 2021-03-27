@@ -8,74 +8,51 @@ import {
     Layout,
     Card,
     Modal,
+    Pagination,
 } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
 import points from '../../../../store/actions/points';
 import subjects from '../../../../store/actions/subjects';
+import problems from '../../../../store/actions/problems';
 import SearchProblem from './problemSearch';
 import { Link } from "react-router-dom";
 const { Content } = Layout;
 const { confirm } = Modal;
 
-const data = [
-    {
-      id: '1',
-      subject: '语文',
-      problemType: '填空题',
-      problemText: '我5点有个会冲',
-      difficultyLevel: '1',
-      knowledgePoints: ['nice', 'developer'],
-      score: 1,
-    },
-    {
-        id: '2',
-        subject: '数学',
-        problemType: '判断题',
-        problemText: '我5点有个会冲突，预计不长，',
-        difficultyLevel: '3',
-        knowledgePoints: ['nice', 'loser'],
-        score: 1,
-    },
-    {
-        id: '3',
-        subject: '英语',
-        problemType: '选择题',
-        problemText: '我5点有个会冲突，预计不长，',
-        difficultyLevel: '5',
-        knowledgePoints: ['nice', 'developer'],
-        score: 1,
-    },
-    {
-        id: '4',
-        subject: '数学',
-        problemType: '判断题',
-        problemText: '我5点有个会冲突，预计不长，',
-        difficultyLevel: '3',
-        knowledgePoints: ['nice', 'loser'],
-        score: 1,
-    }
-];
+const problemTypeMap = {
+    choice:'选择题',
+    judgement: '判断题',
+    blank: '填空题',
+    shortAnswer: '简答题',
+    multiple: '多选题'
+};
+
 class app extends Component {
     constructor(props){
         super(props);
         this.state = {
             formData: {
-                problemType: 'all',
+                problemType: '',
                 subject: '',
                 difficultyLevel: '',
-                knowledgePoints: '',
+                knowledgePoints: [],
                 score: '',
             },
             check: {},
+            pageSize: 10,
+            currentPage: 1,
             userId: window.localStorage.getItem('userId'),
             type: window.localStorage.getItem('type'),
         }
     }
     
     componentDidMount() {
-        const { getSubjects } = this.props;
+        const { formData, pageSize, currentPage } = this.state;
+        const { getAllProblem, getSubjects, getPoints } = this.props;
         getSubjects();
+        getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId')});
+        getAllProblem({...formData, pageSize, currentPage});
     }
 
     // 删除题目
@@ -100,19 +77,22 @@ class app extends Component {
         return [
             {
                 title: '课程',
-                dataIndex: 'subject',
-                key: 'subject',
+                dataIndex: 'subjectName',
+                key: 'subjectName',
                 render: text => <a>{text}</a>,
+                width: 100,
             },
             {
                 title: '题目',
-                dataIndex: 'problemText',
-                key: 'problemText',
+                dataIndex: 'steam',
+                key: 'steam',
+                width: 250,
             },
             {
                 title: '题型',
                 dataIndex: 'problemType',
                 key: 'problemType',
+                render: text => <span>{problemTypeMap[text]}</span>
             },
             {
                 title: '难度',
@@ -123,6 +103,7 @@ class app extends Component {
                 title: '分数',
                 key: 'score',
                 dataIndex: 'score',
+                render: text => <span>{text}分</span>
             },
             {
                 title: '知识点',
@@ -153,10 +134,10 @@ class app extends Component {
                         <Space size="middle">
                             <Link to='/problemsManage/view' replace>查看题目</Link>
                             {
-                                (userId === record.userId || type === '1') ?
+                                (+userId === record.userId || type === '1') ?
                                 <>
-                                    <Link to='/problemsManage/modify' replace>修改题目</Link>
-                                    <a onClick={() => {this.onDelProblem(record.id)}}>删除题目</a>
+                                    <Link to='/problemsManage/modify' replace>修改</Link>
+                                    <a onClick={() => {this.onDelProblem(record.id)}}>删除</a>
                                 </>
                                 : ''
                             }
@@ -186,11 +167,14 @@ class app extends Component {
 
     onSubmit = () => {
         console.log('submit提交表单',this.state.formData);
+        const { formData, pageSize, currentPage } = this.state;
+        const { getAllProblem } = this.props;
+        getAllProblem({...formData, pageSize, currentPage});
     }
 
     render() {
-        const { formData, check } = this.state;
-        const { subjectsList, pointsList } = this.props;
+        const { formData, check, currentPage, pageSize } = this.state;
+        const { subjectsList, pointsList, totalProblemCount, problemList } = this.props;
         return (
             <div style={{ padding: 10 }}>
                 <Card title={
@@ -217,7 +201,18 @@ class app extends Component {
                             bordered
                             style={{ marginTop: 20 }}
                             columns={this.getColumns()}
-                            dataSource={data}
+                            dataSource={problemList}
+                            hideOnSinglePage={true}
+                            pagination={false}
+                        />
+                        <Pagination
+                            style={{ float: 'right', marginTop: 20}}
+                            showQuickJumper
+                            showSizeChanger={true}
+                            current={currentPage}
+                            total={totalProblemCount}
+                            pageSize={pageSize}
+                            onChange={this.onChangePage}
                         />
                     </Content>
                 </Card>
@@ -229,11 +224,14 @@ class app extends Component {
 const mapStateToProps = (state) => ({
     subjectsList: state.subjects.subjectsList,
     pointsList: state.points.pointsList,
+    problemList: state.problems.problemList,
+    totalProblemCount: state.problems.totalProblemCount,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: params => dispatch(points.getPoints(params)),
+    getAllProblem: params => dispatch(problems.getAllProblem(params)),
 })
 
 export default WrappedComponent(connect(
