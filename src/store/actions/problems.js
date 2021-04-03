@@ -62,5 +62,31 @@ const actions = {
             console.log(e);
         });
     },
+
+    viewProblem: params => dispatch => {
+        const options = {
+            method: 'post',
+            api: APIS.viewProblem,
+            params,
+            contentType: 'json',
+        };
+        $ajax.common(options).then((res) => {
+            if (res.code === 10000) {
+                dispatch({
+                    type: actionType.VIEW_PROBLRM,
+                    problemDetail: res.data,
+                });
+            } else {
+                message.error({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+        });
+    },
 }
 export default actions;

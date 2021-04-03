@@ -232,7 +232,6 @@ class app extends Component {
 
     // 查询课程
     handleSelectSubject = (subjectName) => {
-        // TODO: 查询课程
         const { getSubjects } = this.props;
         const { currentPage, pageSize, formData } = this.state;
         getSubjects({ name:subjectName, currentPage, pageSize, userId: window.localStorage.getItem('userId')});

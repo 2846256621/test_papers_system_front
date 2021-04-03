@@ -18,4 +18,5 @@ export default {
 
     ADD_PROBLEM: 'ADD_PROBLEM',
     GET_ALL_PROBLRM: 'GET_ALL_PROBLRM',
+    VIEW_PROBLRM: 'VIEW_PROBLRM',
 }

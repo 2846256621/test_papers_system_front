@@ -119,6 +119,7 @@ const problems = (state = {
     problemAddSuccess: false,
     problemList: [],
     totalProblemsCount: 0,
+    problemDetail: {},
 }, action) => {
     switch (action.type) {
         case actionType.ADD_PROBLEM:
@@ -132,6 +133,12 @@ const problems = (state = {
                 totalProblemsCount: action.totalProblemsCount,
             });
             return state;
+        case actionType.VIEW_PROBLRM:
+            state = Object.assign({}, state, {
+                problemDetail: action.problemDetail,
+            });
+            return state;
+             
         default:
             return state;
     }

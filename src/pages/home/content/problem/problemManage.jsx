@@ -67,6 +67,8 @@ class app extends Component {
             disable: false,
             required: true,
             type: this.props.match.params.type,
+            problemType: sessionStorage.getItem('problemType'),
+            problemId: sessionStorage.getItem('problemId')
         }
     }
 
@@ -410,7 +412,7 @@ class app extends Component {
     }
 
     // 简答
-    renderShotAnswer = () => {
+    renderShortAnswer = () => {
         const { formData, check, disable, required } = this.state;
         return(
             <div className="problems_layout">
@@ -442,18 +444,10 @@ class app extends Component {
         )
     }
 
-    componentWillReceiveProps(newProps) {
-        this.setState({
-            type: newProps.match.params.type,
-        }, () => {
-            this.handleTypeInit(this.state.type);
-        })
-    }
-
     componentDidMount() {
         const { type, formData } = this.state;
         const { getSubjects } = this.props;
-        console.log('formDataTemp |||||', this.state.formDataTemp);
+        console.log('formDataTemp |||||', this.state.formDataTemp, type);
         this.setState({
             formDataTemp: formData,
         });
@@ -472,12 +466,14 @@ class app extends Component {
             case 'modify':
                 this.setState({
                     disable: false,
-                }, this.handleGetDetails);
+                });
+                this.handleGetDetails();
                 break;
             case 'view':
                 this.setState({
                     disable: true,
-                }, this.handleGetDetails);
+                });
+                this.handleGetDetails();
                 break;
             default:
                 break;
@@ -486,7 +482,16 @@ class app extends Component {
 
     // 获取表单详情
     handleGetDetails = () => {
-        console.log('获取表单。获取表单');
+        const { viewProblem } = this.props;
+        const { problemId, problemType } = this.state;
+        viewProblem({ problemId, problemType });
+        setTimeout( () => {
+            const { problemDetail } = this.props;
+            this.setState({
+                formData: problemDetail,
+            });
+        }, 500);
+    
     }
 
     // 更新字段
@@ -557,17 +562,27 @@ class app extends Component {
         if (Object.values(check).filter((item) => !!item).length > 0) return null;
         console.log('submit提交表单',this.state.formData);
         const { addProblem } = this.props;
-        const { formData } = this.state;
-        addProblem({...formData, answer: formData.answer.toString()});
-        setTimeout(() => {
-            const { problemAddSuccess } = this.props;
-            if(problemAddSuccess) {
-                const { formDataTemp } = this.state;
-                this.setState({
-                    formData: formDataTemp
-                });
-            }
-        }, 500);
+        const { formData, type } = this.state;
+        switch(type) {
+            case 'add':
+                addProblem({...formData, answer: formData.answer.toString()});
+                setTimeout(() => {
+                    const { problemAddSuccess } = this.props;
+                    if(problemAddSuccess) {
+                        const { formDataTemp } = this.state;
+                        this.setState({
+                            formData: formDataTemp
+                        });
+                    }
+                }, 500);
+                break;
+            case 'modify':
+                console.log('修改题目');
+                break;
+            default:
+                break;
+        }
+        
     }
     
     // 渲染不同模板
@@ -584,7 +599,7 @@ class app extends Component {
             case 'blank':
                 return this.renderBlank();
             case 'shortAnswer':
-                return this.renderShotAnswer();
+                return this.renderShortAnswer();
             default:
                 return null;
         }
@@ -685,12 +700,14 @@ const mapStateToProps = (state) => ({
     subjectsList: state.subjects.subjectsList,
     pointsList: state.points.pointsList,
     problemAddSuccess: state.problems.problemAddSuccess,
+    problemDetail: state.problems.problemDetail,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: params => dispatch(points.getPoints(params)),
     addProblem: params => dispatch(problems.addProblem(params)),
+    viewProblem: params => dispatch(problems.viewProblem(params)),
 })
 
 export default WrappedComponent(connect(

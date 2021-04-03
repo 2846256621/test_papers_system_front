@@ -49,7 +49,7 @@ class app extends Component {
     
     componentDidMount() {
         const { formData, pageSize, currentPage } = this.state;
-        const { getAllProblem, getSubjects, getPoints } = this.props;
+        const { getAllProblem, getSubjects, getPoints, viewProblem } = this.props;
         getSubjects();
         getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId')});
         getAllProblem({...formData, pageSize, currentPage});
@@ -132,11 +132,27 @@ class app extends Component {
                     const { userId, type } = this.state;
                     return (
                         <Space size="middle">
-                            <Link to='/problemsManage/view' replace>查看题目</Link>
+                            <Link
+                                to= '/problemsManage/view'
+                                onClick={ () => {
+                                    sessionStorage.setItem('problemId', record.problemId);
+                                    sessionStorage.setItem('problemType', record.problemType);
+                                }}
+                                replace
+                            >查看题目</Link>
                             {
                                 (+userId === record.userId || type === '1') ?
                                 <>
-                                    <Link to='/problemsManage/modify' replace>修改</Link>
+                                    <Link
+                                        to='/problemsManage/modify'
+                                        onClick={ () => {
+                                            sessionStorage.setItem('problemId', record.problemId);
+                                            sessionStorage.setItem('problemType', record.problemType);
+                                        }}
+                                        replace
+                                    >
+                                        修改
+                                    </Link>
                                     <a onClick={() => {this.onDelProblem(record.id)}}>删除</a>
                                 </>
                                 : ''
@@ -231,7 +247,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: params => dispatch(points.getPoints(params)),
-    getAllProblem: params => dispatch(problems.getAllProblem(params)),
+    getAllProblem: params => dispatch(problems.getAllProblem(params))
 })
 
 export default WrappedComponent(connect(

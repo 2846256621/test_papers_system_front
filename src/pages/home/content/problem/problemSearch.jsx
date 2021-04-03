@@ -28,7 +28,6 @@ export default class app extends Component {
             pointsList,
             subjectsList,
         } = this.props;
-        console.log('formData', this.props)
         return (
             <div>
                 <Form
