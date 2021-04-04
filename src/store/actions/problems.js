@@ -46,7 +46,7 @@ const actions = {
         $ajax.common(options).then((res) => {
             if (res.code === 10000) {
                 dispatch({
-                    type: actionType.GET_ALL_PROBLRM,
+                    type: actionType.GET_ALL_PROBLEM,
                     problemList: res.data.dataList,
                     totalProblemsCount: res.data.totalCount,
                 });
@@ -73,8 +73,60 @@ const actions = {
         $ajax.common(options).then((res) => {
             if (res.code === 10000) {
                 dispatch({
-                    type: actionType.VIEW_PROBLRM,
+                    type: actionType.VIEW_PROBLEM,
                     problemDetail: res.data,
+                });
+            } else {
+                message.error({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+        });
+    },
+
+    dropProblem: params => dispatch => {
+        const options = {
+            method: 'post',
+            api: APIS.dropProblem,
+            params,
+            contentType: 'json',
+        };
+        $ajax.common(options).then((res) => {
+            if (res.code === 10000) {
+                dispatch({
+                    type: actionType.DROP_PROBLEM,
+                    problemDropSuccess: true,
+                });
+            } else {
+                message.error({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+        });
+    },
+
+    modifyProblem: params => dispatch => {
+        const options = {
+            method: 'post',
+            api: APIS.modifyProblem,
+            params,
+            contentType: 'json',
+        };
+        $ajax.common(options).then((res) => {
+            if (res.code === 10000) {
+                dispatch({
+                    type: actionType.MODIFY_PROBLEM,
+                    problemModifySuccess: true,
                 });
             } else {
                 message.error({

@@ -31,5 +31,7 @@ const APIS = {
     addProblem: `${target}/problem/addProblem`,
     getProblemList: `${target}/problem/selectProblem`,
     viewProblem: `${target}/problem/viewProblem`,
+    dropProblem: `${target}/problem/dropProblem`,
+    modifyProblem: `${target}/problem/modifyProblem`,
 }
 export default APIS;

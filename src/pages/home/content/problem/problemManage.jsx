@@ -561,8 +561,8 @@ class app extends Component {
         const check = this.onCheck();
         if (Object.values(check).filter((item) => !!item).length > 0) return null;
         console.log('submit提交表单',this.state.formData);
-        const { addProblem } = this.props;
-        const { formData, type } = this.state;
+        const { addProblem, modifyProblem } = this.props;
+        const { formData, type, problemId, problemType } = this.state;
         switch(type) {
             case 'add':
                 addProblem({...formData, answer: formData.answer.toString()});
@@ -577,7 +577,22 @@ class app extends Component {
                 }, 500);
                 break;
             case 'modify':
-                console.log('修改题目');
+                modifyProblem({
+                    ...formData,
+                    answer: formData.answer.toString(),
+                    problemId,
+                    problemType,
+                });
+                setTimeout(() => {
+                    const { problemModifySuccess } = this.props;
+                    if(problemModifySuccess) {
+                        message.success({
+                            content:'修改成功',
+                            style: {marginTop: '30vh'},
+                        });
+                    }
+                }, 500);
+                break;
                 break;
             default:
                 break;
@@ -701,6 +716,7 @@ const mapStateToProps = (state) => ({
     pointsList: state.points.pointsList,
     problemAddSuccess: state.problems.problemAddSuccess,
     problemDetail: state.problems.problemDetail,
+    problemModifySuccess: state.problems.problemModifySuccess,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -708,6 +724,7 @@ const mapDispatchToProps = (dispatch) => ({
     getPoints: params => dispatch(points.getPoints(params)),
     addProblem: params => dispatch(problems.addProblem(params)),
     viewProblem: params => dispatch(problems.viewProblem(params)),
+    modifyProblem: params => dispatch(problems.modifyProblem(params)),
 })
 
 export default WrappedComponent(connect(

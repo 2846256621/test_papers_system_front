@@ -38,6 +38,7 @@ class app extends Component {
                 difficultyLevel: '',
                 knowledgePoints: [],
                 score: '',
+                problemText: '',
             },
             check: {},
             pageSize: 10,
@@ -49,26 +50,34 @@ class app extends Component {
     
     componentDidMount() {
         const { formData, pageSize, currentPage } = this.state;
-        const { getAllProblem, getSubjects, getPoints, viewProblem } = this.props;
+        const { getAllProblem, getSubjects, getPoints } = this.props;
         getSubjects();
         getPoints({ currentPage: 1, pageSize: 10, userId: window.localStorage.getItem('userId')});
         getAllProblem({...formData, pageSize, currentPage});
     }
 
     // 删除题目
-    onDelProblem = (id) => {
+    onDelProblem = (problemId, problemType) => {
         confirm({
             title: '系统提示',
             icon: <ExclamationCircleOutlined />,
-            content: `确定要删除题目${id}吗？`,
+            content: `确定要删除此题目吗？`,
             style: { marginTop: 150 },
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
-            onOk() {
-              console.log('OK');
+            onOk: () => {
+              const { dropProblem } = this.props;
+              dropProblem({ problemId, problemType });
+              setTimeout(() => {
+                const { problemDropSuccess, getAllProblem } = this.props;
+                if (problemDropSuccess) {
+                    const { formData, pageSize, currentPage } = this.state;
+                    getAllProblem({...formData, pageSize, currentPage});
+                }
+              })
             },
-            onCancel() {
+            onCancel: () =>  {
               console.log('Cancel');
             },
           });
@@ -153,7 +162,7 @@ class app extends Component {
                                     >
                                         修改
                                     </Link>
-                                    <a onClick={() => {this.onDelProblem(record.id)}}>删除</a>
+                                    <a onClick={() => {this.onDelProblem(record.problemId, record.problemType)}}>删除</a>
                                 </>
                                 : ''
                             }
@@ -242,12 +251,14 @@ const mapStateToProps = (state) => ({
     pointsList: state.points.pointsList,
     problemList: state.problems.problemList,
     totalProblemCount: state.problems.totalProblemCount,
+    problemDropSuccess:  state.problems.problemDropSuccess,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPoints: params => dispatch(points.getPoints(params)),
-    getAllProblem: params => dispatch(problems.getAllProblem(params))
+    getAllProblem: params => dispatch(problems.getAllProblem(params)),
+    dropProblem: params => dispatch(problems.dropProblem(params)),
 })
 
 export default WrappedComponent(connect(

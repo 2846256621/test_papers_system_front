@@ -185,7 +185,30 @@ export default class app extends Component {
                             </Select>
                         </BaseForm>
                     </Form.Item>
-
+                    {
+                        !type 
+                        ? 
+                        <Form.Item
+                            label="题目信息"
+                            name="problemText"
+                            required={require}
+                        >
+                            <BaseForm
+                                warning={check.problemText}
+                                required={require}
+                                requireStyle
+                            >
+                                <Input
+                                    style={{ width: 300 }}
+                                    placeholder="请输入题目信息"
+                                    value={formData.problemText || undefined}
+                                    onChange={(e) => { handleChangeItem('problemText', e.target.value)}}
+                                    disabled={disabled}
+                                />
+                            </BaseForm>
+                        </Form.Item>
+                        : ''
+                    }
                     <Form.Item className="problems_layout">
                         {
                             !type ? 

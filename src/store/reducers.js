@@ -120,6 +120,7 @@ const problems = (state = {
     problemList: [],
     totalProblemsCount: 0,
     problemDetail: {},
+    problemDropSuccess: false,
 }, action) => {
     switch (action.type) {
         case actionType.ADD_PROBLEM:
@@ -127,18 +128,27 @@ const problems = (state = {
                 problemAddSuccess: action.problemAddSuccess,
             });
             return state;
-        case actionType.GET_ALL_PROBLRM:
+        case actionType.GET_ALL_PROBLEM:
             state = Object.assign({}, state, {
                 problemList: action.problemList,
                 totalProblemsCount: action.totalProblemsCount,
             });
             return state;
-        case actionType.VIEW_PROBLRM:
+        case actionType.VIEW_PROBLEM:
             state = Object.assign({}, state, {
                 problemDetail: action.problemDetail,
             });
             return state;
-             
+        case actionType.DROP_PROBLEM:
+            state = Object.assign({}, state, {
+                problemDropSuccess: action.problemDropSuccess,
+            });
+            return state;
+        case actionType.MODIFY_PROBLEM:
+            state = Object.assign({}, state, {
+                problemModifySuccess: action.problemModifySuccess,
+            });
+            return state;
         default:
             return state;
     }
