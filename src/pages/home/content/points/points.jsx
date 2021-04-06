@@ -158,10 +158,16 @@ class app extends Component {
             //         style: {marginTop: '30vh'},
             //     });
             // } else {
-                const tempModalFormDate = Object.assign({}, record, modalFormDate);
-                console.log("填写数据",modalFormDate);
-                console.log("原始数据",record);
-                console.log("合成数据",tempModalFormDate);
+                for (const key in modalFormDate) {  // 去除对象内多余的空值key
+                    if (modalFormDate[key] === '') {
+                        delete modalFormDate[key];
+                    }
+                }
+                const tempSubjectId = this.handleSelectPointId(record.subjectName);
+                const tempModalFormDate = Object.assign({}, record,{ subjectId: tempSubjectId }, modalFormDate);
+                // console.log("填写数据",modalFormDate);
+                // console.log("原始数据",record);
+                // console.log("合成数据",tempModalFormDate);
                 const { updatePoint, getPoints } = this.props;
                 updatePoint(tempModalFormDate);
                 setTimeout(() => {
