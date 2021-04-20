@@ -91,7 +91,7 @@ class app extends Component {
                             <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>
                             <Breadcrumb.Item>后台管理</Breadcrumb.Item>
                             <Breadcrumb.Item>账号管理</Breadcrumb.Item>
-                            <Breadcrumb.Item>用户管理</Breadcrumb.Item>
+                            <Breadcrumb.Item>个人中心</Breadcrumb.Item>
                         </Breadcrumb>
                     }
                 >

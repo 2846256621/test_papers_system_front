@@ -33,5 +33,9 @@ const APIS = {
     viewProblem: `${target}/problem/viewProblem`,
     dropProblem: `${target}/problem/dropProblem`,
     modifyProblem: `${target}/problem/modifyProblem`,
+
+    // 试卷管理
+    automaticPaper: `${target}/paper/makePaper`,
+    detailsPaper: `${target}/paper/paperDetails`,
 }
 export default APIS;

@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     Breadcrumb,
     Layout,
@@ -18,6 +19,7 @@ import moment from 'moment';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import 'moment/locale/zh-cn';
 import RenderProblem from '../component/RenderProblem';
+import papers from "../../../../store/actions/papers";
 import WrappedComponent from '../component/wrapComponent';
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -30,62 +32,13 @@ class app extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data: [{
-                fitness: 0.43,
-                difficulty: 0.8,
-                pointCoverage: 0.3,
-                problemNum: 20,
-                score: 100,
-            }],
-            problemList: [{
-                id: '1',
-                problemType: 'choice',
-                problemText: '计算机网络是一门很有意思的课程。',
-                choiceOptionA: '是的',
-                choiceOptionB: '不是',
-                choiceOptionC: '还行',
-                choiceOptionD: '一般',
-                score: 2,
-                answer: 'A',
-            }, {
-                id: '5',
-                problemType: 'multiple',
-                problemText: '你的爱好有什么',
-                multipleOptionA: '吃饭',
-                multipleOptionB: '睡觉',
-                multipleOptionC: '上厕所',
-                multipleOptionD: '打游戏',
-                multipleOptionE: '出去玩',
-                multipleOptionF: '',
-                score: 5,
-                answer: 'A,B',
-            }, {
-                id: '2',
-                problemType: 'judgement',
-                problemText: '你是世界上最聪明的是吗？',
-                score: 4,
-                answer: 'true',
-            },{
-                id: '3',
-                problemType: 'blank',
-                problemText: '计算机网络是一门很有意思的课程，最有意思的部分是____和_____。',
-                score: 3,
-                answer: '优秀、聪明',
-            },{
-                id: '4',
-                problemType: 'shortAnswer',
-                problemText: '你为什么感觉到幸福呢',
-                score: 6,
-                answer: '因为年年有今日，岁岁有今朝',
-            }],
-            testPaperDetails: {
-                testPaperName: '今日颜值测试考试',
-                subject:'语文',
-                startTime: '2020-01-13 21:00:00',
-                endTime: '2020-01-13 21:00:00',
-            },
             modalFormDate: {},
         }
+    }
+    componentDidMount(){
+        const { detailsPaper } = this.props;
+        const examId = this.props.history.location.search.slice(4);
+        detailsPaper({examId});
     }
     getTestPaPaerColumns = () => {
         return [{
@@ -219,7 +172,7 @@ class app extends Component {
     }
 
     render() {
-        const { data, problemList, testPaperDetails } = this.state;
+        const { paperAttribute, problemList, paperDetails } = this.props;
         return (
             <div style={{ padding: 10 }}>
                 <Card title={
@@ -233,21 +186,14 @@ class app extends Component {
                     <Content
                         className="site-layout-background test-paper-details"
                     >
-                        <Alert message="组卷结果请及时保存，若直接退出则不会保存组卷结果。" type="warning" showIcon closable />
+                        <Alert message="由于组卷过程较慢，请等待组卷结果。" type="warning" showIcon closable />
                         <Card
                             style={{ marginTop: 20}}
                             title="组卷结果"
-                            extra={
-                                <Button
-                                    type="primary"
-                            >
-                                保存试卷
-                            </Button>
-                            }
                         >
                                 <Table
                                     columns={this.getResultColumns()}
-                                    dataSource={data}
+                                    dataSource={[].concat(paperAttribute)}
                                     pagination={false}
                                 />
                         </Card>
@@ -258,7 +204,7 @@ class app extends Component {
                             <Space size={50}>
                                 <Button
                                     type="primary"
-                                    onClick={() => this.onModifyTestPaper(testPaperDetails)}
+                                    onClick={() => this.onModifyTestPaper(paperDetails)}
                                 >
                                     修改试卷信息
                                 </Button>
@@ -266,7 +212,7 @@ class app extends Component {
                         }>
                                 <Table
                                     columns={this.getTestPaPaerColumns()}
-                                    dataSource={[testPaperDetails]}
+                                    dataSource={[].concat(paperDetails)}
                                     pagination={false}
                                 />
                         </Card>
@@ -284,14 +230,14 @@ class app extends Component {
                         >
                             <Form>
                                 {
-                                    problemList.map(item => {
+                                    problemList.map((item, index) => {
                                         return(
                                             <Form.Item
                                                 label=""
                                                 name={item.answer}
-                                                key={item.id}
+                                                key={item.problemText}
                                             >
-                                                {item.id}.{item.problemText} ({item.score}分)
+                                                {index + 1}.{item.problemText} ({item.score}分)
                                                 <RenderProblem
                                                     field={item}
                                                     onChangeItem={this.onChangeItem}
@@ -308,4 +254,18 @@ class app extends Component {
         )
     }
 }
-export default WrappedComponent(app);
+
+const mapStateToProps = state => ({
+    paperAttribute: state.papers.paperAttribute,
+    paperDetails: state.papers.paperDetails,
+    problemList: state.papers.problemList,
+});
+ 
+const mapDispatchToProps = dispatch => ({
+    detailsPaper: (params) => dispatch(papers.detailsPaper(params)),
+});
+ 
+export default WrappedComponent(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(app));

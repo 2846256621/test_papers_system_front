@@ -13,7 +13,7 @@ import {
     Button,
     DatePicker,
 } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, EyeOutlined, FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
 import { Link } from "react-router-dom";
 import moment from 'moment';
@@ -67,19 +67,19 @@ class app extends Component {
                 title: '试卷ID',
                 dataIndex: 'id',
                 key: 'id',
-                width:100,
+                width:80,
             },
             {
                 title: '试卷名称',
                 dataIndex: 'testPaperName',
                 key: 'testPaperName',
-                width:250,
+                width:160,
             },
             {
                 title: '所属课程',
                 dataIndex: 'subject',
                 key: 'subject',
-                width:150,
+                width:120,
             },
             {
                 title: '开始时间',
@@ -126,18 +126,40 @@ class app extends Component {
                 title: '操作',
                 key: '',
                 fixed: 'right',
-                width:200,
+                width: 180,
                 render: (text, record) => {
                     const { userId, type } = this.state;
                     return (
                         <Space size="middle">
-                            <Link to='/testPaperDetails' replace>查看试卷</Link>
+                            <Link to={`/testPaperDetails?id=${record.id}`} replace>
+                                <Button
+                                    type="primary"
+                                    shape="circle" 
+                                    icon={<EyeOutlined />}
+                                    onClick={() => {this.onModifyTestPaper(record)}}
+                                >
+                                    {/* 查看 */}
+                                </Button>
+                            </Link>
+                            <Button
+                                shape="circle" 
+                                icon={<FormOutlined />}
+                                onClick={() => {this.onModifyTestPaper(record)}}
+                            >
+                                {/* 修改 */}
+                            </Button>
                             {
                                 (userId === record.userId  || type === '1') ? 
                                  (
                                     <>
-                                        <a onClick={() => {this.onModifyTestPaper(record)}}>修改</a>
-                                        <a onClick={() => {this.onDelTestPaper(record.id)}}>删除</a>
+                                        <Button
+                                            danger
+                                            shape="circle" 
+                                            icon={<DeleteOutlined />}
+                                            onClick={() => {this.onDelTestPaper(record.id)}}
+                                        >
+                                            {/* 删除 */}
+                                        </Button>
                                     </>
                                 ) : ''
                             }

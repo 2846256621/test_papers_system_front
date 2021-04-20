@@ -17,10 +17,13 @@ import {
 import BaseForm from '../component/BaseForm';
 import points from '../../../../store/actions/points';
 import subjects from '../../../../store/actions/subjects';
+import papers from "../../../../store/actions/papers";
 import WrappedComponent from '../component/wrapComponent';
 import './index.css';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import 'moment/locale/zh-cn';
+import $ajax from '../../../../utils/ajax';
+import APIS from '../../../../constants/api';
 const { Content } = Layout;
 const { Option }  = Select;
 
@@ -102,7 +105,7 @@ class app extends Component {
                 }
             },
             {
-                title: '每题分数',
+                title: '总分数',
                 dataIndex: 'problemTypeScore',
                 width: 150,
                 render: (text, record) => {
@@ -131,10 +134,10 @@ class app extends Component {
         tempProblemTypeInfo.forEach(item => {
             if (item.key === record.key) {
                 if (filed === 'problemTypeNum') {
-                    item.problemTypeNum = value;
+                    item.problemTypeNum = parseInt(value) || 0;
                 }
                 if (filed === 'problemTypeScore'){
-                    item.problemTypeScore = value;
+                    item.problemTypeScore = parseInt(value) || 0;
                 }
             }
         });
@@ -161,13 +164,12 @@ class app extends Component {
 
     // 处理单个字段变更
     onFieldsChange = (filedName, value) => {
-        console.log('filed, value', filedName, value);
         const { testPaperInfo } = this.state;
         const tempTestPaperInfo = Object.assign({}, testPaperInfo, { [filedName]: value });
         if(filedName === 'subjectId'){
             tempTestPaperInfo.points = [];
-            const { getAllPoints } = this.props;
-            getAllPoints({subjectId: value});
+            const { getPoints } = this.props;
+            getPoints({subjectId: value});
         }
         this.setState({
             testPaperInfo: tempTestPaperInfo,
@@ -226,7 +228,6 @@ class app extends Component {
             const check = this.onCheck();
             const { testPaperInfo } = this.state;
             if (Object.values(check).filter((item) => !!item).length > 0) return null;
-            console.log('表单信息======',this.state.testPaperInfo );
             if (testPaperInfo.problemTypeInfo.length === 0) {
                 message.error({
                     content: '请先选择试卷包含题型，再开始组卷!',
@@ -234,7 +235,24 @@ class app extends Component {
                     style: {marginTop: '30vh'},
                 });
             }
-            this.props.history.push('/testPaperDetails');
+            $ajax.common({
+                method: 'post',
+                api: APIS.automaticPaper,
+                params: {...testPaperInfo, userId: window.localStorage.getItem('userId')},
+                contentType: 'json',
+            }).then(res => {
+                if (res.code === 10000 && res.success === true) { 
+                    this.props.history.push(`/testPaperDetails?id=${res.data}`);
+                } else {
+                    message.error({
+                        content: res.message,
+                        className: 'custom-class',
+                        style: {marginTop: '30vh'},
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            });
         });
     }
 
@@ -339,7 +357,10 @@ class app extends Component {
                                         >
                                             {
                                                 subjectsList.map(item => (
-                                                    <Option value={item.subjectId} key={item.subjectId}>
+                                                    <Option
+                                                        value={item.subjectId}
+                                                        key={`subject_${item.subjectId}`}
+                                                    >
                                                         {item.subjectName}
                                                     </Option>
                                                 ))
@@ -367,7 +388,12 @@ class app extends Component {
                                             {
                                                 pointsList.map(item => {
                                                     return (
-                                                        <Option value={item.id}>{item.pointName}</Option>
+                                                        <Option
+                                                            value={item.pointId}
+                                                            key={`pointId_${item.pointId}`}
+                                                        >
+                                                            {item.pointName}
+                                                        </Option>
                                                     )
                                                 })
                                             }

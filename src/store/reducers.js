@@ -154,10 +154,31 @@ const problems = (state = {
     }
 }
 
+
+const papers = (state = {
+    autoMaticPaperSuccess: false,
+    paperAttribute: {},
+    paperDetails: {},
+    problemList: [],
+}, action) => {
+    switch (action.type) {
+        case actionType.DETAILS_PAPER:
+            state = Object.assign({}, state, {
+                paperAttribute: action.paperAttribute,
+                paperDetails: action.paperDetails,
+                problemList: action.problemList,
+            });
+            return state;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     login,
     points,
     subjects,
     users,
     problems,
+    papers,
 });

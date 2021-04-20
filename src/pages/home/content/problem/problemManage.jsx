@@ -578,10 +578,9 @@ class app extends Component {
                 break;
             case 'modify':
                 modifyProblem({
-                    ...formData,
-                    answer: formData.answer.toString(),
+                    ...this.state.formData,
+                    answer: this.state.formData.answer.toString(),
                     problemId,
-                    problemType,
                 });
                 setTimeout(() => {
                     const { problemModifySuccess } = this.props;
@@ -621,7 +620,7 @@ class app extends Component {
     }
 
     render() {
-        const { formData, check, disable, required, type, isGetPoints } = this.state;
+        const { formData, check, disable, required, type } = this.state;
         const { problemType } = formData;
         const { subjectsList, pointsList } = this.props;
         return (

@@ -13,7 +13,7 @@ import {
     Pagination,
     message,
 } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
 import subjects from '../../../../store/actions/subjects';
 import '../index.css';
@@ -84,8 +84,23 @@ class app extends Component {
                             {
                                 (+userId === record.userId || type === '1') ? 
                                 <>
-                                    <a onClick={() =>{this.subjectManageModal('modify', record)}}>修改</a>
-                                    <a onClick={() => {this.onDelSubject(record.subjectId)}}>删除</a>
+                                    <Button
+                                        type="primary"
+                                        ghost
+                                        shape="round" 
+                                        icon={<FormOutlined />} 
+                                        onClick={() =>{this.subjectManageModal('modify', record)}}
+                                    >
+                                        修改
+                                    </Button>
+                                    <Button
+                                        danger
+                                        shape="round" 
+                                        icon={<DeleteOutlined />} 
+                                        onClick={() => {this.onDelSubject(record.subjectId)}}
+                                    >
+                                        删除
+                                    </Button>
                                 </>
                                 : '无'
                             }

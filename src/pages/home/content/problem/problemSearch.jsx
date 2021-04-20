@@ -156,7 +156,7 @@ export default class app extends Component {
                     
                     <Form.Item
                         label="题目分数"
-                        name="difficultyLevel"
+                        name="score"
                         required={require}
                     >
                         <BaseForm

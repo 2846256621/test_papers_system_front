@@ -9,14 +9,16 @@ import {
     Card,
     Modal,
     Pagination,
+    Button
 } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, EyeOutlined, FormOutlined, DeleteOutlined  } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
 import points from '../../../../store/actions/points';
 import subjects from '../../../../store/actions/subjects';
 import problems from '../../../../store/actions/problems';
 import SearchProblem from './problemSearch';
 import { Link } from "react-router-dom";
+
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -88,20 +90,20 @@ class app extends Component {
                 title: '课程',
                 dataIndex: 'subjectName',
                 key: 'subjectName',
-                render: text => <a>{text}</a>,
                 width: 100,
             },
             {
                 title: '题目',
                 dataIndex: 'steam',
                 key: 'steam',
-                width: 250,
+                width: 300,
             },
             {
                 title: '题型',
                 dataIndex: 'problemType',
                 key: 'problemType',
-                render: text => <span>{problemTypeMap[text]}</span>
+                render: text => <span>{problemTypeMap[text]}</span>,
+                width: 100,
             },
             {
                 title: '难度',
@@ -112,7 +114,8 @@ class app extends Component {
                 title: '分数',
                 key: 'score',
                 dataIndex: 'score',
-                render: text => <span>{text}分</span>
+                render: text => <span>{text}分</span>,
+                width: 100,
             },
             {
                 title: '知识点',
@@ -121,9 +124,9 @@ class app extends Component {
                 render: tags => (
                     <>
                         {tags.map((tag, index) => {
-                            let color = tag.length > 5 ? 'geekblue' : 'green';
-                            if (tag === 'loser') {
-                                color = 'volcano';
+                            let color = tag.length > 5 ? 'volcano' : 'green';
+                            if (tag.length > 10) {
+                                color = 'cyan';
                             }
                             return (
                                 <Tag color={color} key={`${tag}_${index}`}>
@@ -148,7 +151,15 @@ class app extends Component {
                                     sessionStorage.setItem('problemType', record.problemType);
                                 }}
                                 replace
-                            >查看题目</Link>
+                            >
+                                <Button
+                                    type="primary"
+                                    shape="circle" 
+                                    icon={<EyeOutlined />}
+                                    >
+                                        {/* 查看 */}
+                                    </Button>
+                            </Link>
                             {
                                 (+userId === record.userId || type === '1') ?
                                 <>
@@ -160,9 +171,21 @@ class app extends Component {
                                         }}
                                         replace
                                     >
-                                        修改
+                                        <Button
+                                            shape="circle" 
+                                            icon={<FormOutlined />}
+                                        >
+                                            {/* 修改 */}
+                                        </Button>
                                     </Link>
-                                    <a onClick={() => {this.onDelProblem(record.problemId, record.problemType)}}>删除</a>
+                                    <Button
+                                        danger
+                                        shape="circle" 
+                                        icon={<DeleteOutlined />}
+                                        onClick={() => {this.onDelProblem(record.problemId, record.problemType)}}
+                                    >
+                                        {/* 删除 */}
+                                    </Button>
                                 </>
                                 : ''
                             }
@@ -235,7 +258,8 @@ class app extends Component {
                             showQuickJumper
                             showSizeChanger={true}
                             current={currentPage}
-                            total={totalProblemCount}
+                            defaultCurrent={1}
+                            total={totalProblemCount || 200}
                             pageSize={pageSize}
                             onChange={this.onChangePage}
                         />

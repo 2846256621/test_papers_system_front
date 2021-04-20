@@ -47,12 +47,20 @@ export default class renderProblem extends Component {
                             onChangeItem('answer', e);
                         }}
                     >
-                        <Checkbox value="A">A</Checkbox>
-                        <Checkbox value="B">B</Checkbox>
-                        <Checkbox value="C">C</Checkbox>
-                        <Checkbox value="D">D</Checkbox>
-                        <Checkbox value="E">E</Checkbox>
-                        <Checkbox value="F">F</Checkbox>
+                        <Checkbox value="A">A.{field.multipleOptionA}</Checkbox>
+                        <Checkbox value="B">B.{field.multipleOptionB}</Checkbox>
+                        <Checkbox value="C">C.{field.multipleOptionC}</Checkbox>
+                        <Checkbox value="D">D.{field.multipleOptionD}</Checkbox>
+                        {
+                            field.multipleOptionE ?
+                            <Checkbox value="E">E.{field.multipleOptionE}</Checkbox>
+                            : ''
+                        }
+                        {
+                            field.multipleOptionF ?
+                            <Checkbox value="F">F.{field.multipleOptionF}</Checkbox>
+                            : ''
+                        }
                     </Checkbox.Group>
                 );
                 break;
