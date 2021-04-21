@@ -59,7 +59,7 @@ class app extends Component {
                 multipleOptionD: '',
                 multipleOptionE: '',
                 multipleOptionF: '',
-                score:'',
+                score:'2',
                 userId: window.localStorage.getItem('userId'),
             },
             formDataTemp: {},
@@ -631,8 +631,18 @@ class app extends Component {
                         <Breadcrumb.Item>后台管理</Breadcrumb.Item>
                         <Breadcrumb.Item>试题管理</Breadcrumb.Item>
                         <Breadcrumb.Item>{type === 'add' ? '增加试题' : '修改试题'}</Breadcrumb.Item>
-                    </Breadcrumb>
-                }>
+                    </Breadcrumb>}
+                    extra={
+                       <Button
+                            type="primary"
+                            onClick={() =>{
+                                this.props.history.push(`/problemList`);
+                            }}
+                        >
+                            返回题目列表
+                        </Button>
+                    }    
+                >
                     <Content
                         className="site-layout-background"
                     >

@@ -18,6 +18,7 @@ import WrappedComponent from '../component/wrapComponent';
 import user from '../../../../store/actions/user';
 import $ajax from '../../../../utils/ajax';
 import APIS from '../../../../constants/api';
+import '../index.css';
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -284,7 +285,7 @@ class app extends Component {
     render() {
         const { modalFormDate, pageSize, pageNum, totalCount, tableData } = this.state;
         return (
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 10 }} className="user-manager-content">
                 <Card title={
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>

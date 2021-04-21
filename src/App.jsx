@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import RouteMap from './routers/route.jsx';
 import '../node_modules/antd/dist/antd.css';
+import './index.css';
 class App extends Component {
   render() {
     return (

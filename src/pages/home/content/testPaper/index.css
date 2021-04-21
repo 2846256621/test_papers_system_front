@@ -15,3 +15,11 @@
     padding-top: 2px;
     padding-bottom: 3px;
 }
+.test-paper-list .ant-card-head, .test-paper-automatic-content .ant-card-head {
+    background: #f1f3f3;
+    border: 1px solid #e5e8e9;
+}
+.test-paper-automatic .ant-card-head {
+    background: transparent;
+    border: 1px solid #f0f0f0;
+}

@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { Menu } from 'antd';
 import { SettingOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
-
+import image from "../../../assets/images/logo.png";
 const { SubMenu } = Menu;
 export default class app extends Component {
     constructor(props){
         super(props);
         this.state = {
-
+            
         }
     }
 
@@ -26,12 +26,15 @@ export default class app extends Component {
                     theme="dark"
                     mode="horizontal"
                 >    
-                    <Menu.Item>
+                    <Menu.Item style={{ padding: 0}}>
                         <img
-                            width={50}
-                            height={50}
-                            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200"
+                            width={60}
+                            height={60}
+                            src={image}
                         />
+                        <div style={{ display: 'inline-block', marginLeft: '20px', fontSize: '17px', fontWeight: 'bold'}}>
+                            邮易自动组卷系统
+                        </div>
                     </Menu.Item>
                     <SubMenu key="3"
                         icon={<SettingOutlined />}

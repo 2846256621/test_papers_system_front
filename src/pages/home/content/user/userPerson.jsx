@@ -84,7 +84,7 @@ class app extends Component {
     render() {
         const { usernameDisabled, passwordDisabled } = this.state;
         return (
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 10 }} className="user-content">
                 <Card
                     title={
                         <Breadcrumb style={{ margin: '16px 0' }}>

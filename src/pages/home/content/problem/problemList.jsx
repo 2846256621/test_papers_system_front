@@ -39,7 +39,7 @@ class app extends Component {
                 subject: '',
                 difficultyLevel: '',
                 knowledgePoints: [],
-                score: '',
+                score: '2',
                 problemText: '',
             },
             check: {},
@@ -224,7 +224,7 @@ class app extends Component {
         const { formData, check, currentPage, pageSize } = this.state;
         const { subjectsList, pointsList, totalProblemCount, problemList } = this.props;
         return (
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 10 }} className="problem-list">
                 <Card title={
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>

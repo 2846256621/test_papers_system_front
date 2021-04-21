@@ -37,3 +37,7 @@ body{
 .search-item .ant-form-item {
     margin-bottom: 15px !important;
 }
+.problem_container .ant-card-head, .problem-list .ant-card-head {
+    background: #f1f3f3;
+    border: 1px solid #e5e8e9;
+}

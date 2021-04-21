@@ -338,7 +338,7 @@ class app extends Component {
         const { formData, modalFormDate, currentPage, pageSize } = this.state;
         const { pointsList, totalPointsCount, subjectsList } = this.props;
         return (
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 10 }}  className="point-content">
                 <Card title={
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>

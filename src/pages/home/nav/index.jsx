@@ -26,7 +26,7 @@ export default class app extends Component {
                     defaultSelectedKeys={['1']}
                     defaultOpenKeys={['sub1','sub2','sub3']}
                     mode="inline"
-                    theme="dark"
+                    // theme="dark"
                     style={{ height: 980, borderRight: 0}}
                 >
                     <Menu.Item key="1" icon={<HomeOutlined />}>

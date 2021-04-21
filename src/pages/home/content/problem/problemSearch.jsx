@@ -154,7 +154,7 @@ export default class app extends Component {
                         </BaseForm>
                     </Form.Item>
                     
-                    <Form.Item
+                    {/* <Form.Item
                         label="题目分数"
                         name="score"
                         required={require}
@@ -184,7 +184,7 @@ export default class app extends Component {
                                 <Option value="20">20</Option>
                             </Select>
                         </BaseForm>
-                    </Form.Item>
+                    </Form.Item> */}
                     {
                         !type 
                         ? 

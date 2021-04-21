@@ -12,7 +12,7 @@ export default (WrappedComponent) => {
         render() {
             return (
                 <Layout>
-                    <Header style={{ paddingLeft: 10, paddingRight: 10, height: 70 }}>
+                    <Header style={{ paddingLeft: 5, paddingRight: 10, height: 70 }}>
                         <Head />
                     </Header>
                     <Layout>

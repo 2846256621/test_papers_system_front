@@ -105,7 +105,7 @@ class app extends Component {
                 }
             },
             {
-                title: '总分数',
+                title: '每题分数',
                 dataIndex: 'problemTypeScore',
                 width: 150,
                 render: (text, record) => {
@@ -265,7 +265,7 @@ class app extends Component {
         };
 
         return (
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 10 }} className="test-paper-automatic-content">
                 <Card title={
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>

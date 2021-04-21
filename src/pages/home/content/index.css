@@ -24,6 +24,12 @@
 .home-container .ant-statistic-content {
     font-size: 18px;
 }
-.home-container .ant-card-head {
+.user-manager-content .ant-card-head, .user-content .ant-card-head{
+    background: #f1f3f3;
+    border: 1px solid #e5e8e9;
     font-size: 14px;
+}
+.site-layout-background .ant-card-head{
+    background: transparent;
+    border: 1px solid #f0f0f0;
 }
