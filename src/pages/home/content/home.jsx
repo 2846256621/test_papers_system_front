@@ -12,11 +12,42 @@ import {
 import { LikeOutlined } from '@ant-design/icons';
 import './index.css';
 import WrappedComponent from './component/wrapComponent';
+import $ajax from '../../../utils/ajax';
+import APIS from '../../../constants/api';
 const { Content } = Layout;
 const { Title } = Typography;
 
 class app extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            totalQuestion: '',
+            totalPaper: '',
+            totalSubject: '',
+            totalKnowledge: '',
+            totalUser: '',
+        }
+    }
+    componentDidMount(){
+        $ajax.common({
+            method: 'get',
+            api: APIS.home,
+        }).then(res => {
+            if (res.code === 10000 && res.success === true) { 
+                this.setState({
+                    totalQuestion: res.data.totalQuestion,
+                    totalPaper: res.data.totalPaper,
+                    totalSubject: res.data.totalSubject,
+                    totalKnowledge: res.data.totalKnowledge,
+                    totalUser: res.data.totalUser,
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }
     render() {
+        const { totalKnowledge, totalPaper, totalQuestion, totalSubject, totalUser } = this.state;
         return (
             <div className="home-container">
                 <Card title={
@@ -30,7 +61,7 @@ class app extends Component {
                         className="site-layout-background"
                     >
                         <Title level={4}>
-                            欢迎来到遗传算法自动组卷系统
+                            欢迎来到邮易自动组卷系统
                         </Title>
                         <Row gutter={16}>
                             <Col span={8}>
@@ -39,7 +70,7 @@ class app extends Component {
                                         进入查看
                                     </Link>
                                 }>
-                                    <Statistic prefix={<LikeOutlined />} value={1002} />
+                                    <Statistic prefix={<LikeOutlined />} value={totalQuestion} />
                                 </Card>
                             </Col>
                             <Col span={8}>
@@ -48,7 +79,7 @@ class app extends Component {
                                         进入查看
                                     </Link>
                                 }>
-                                    <Statistic prefix={<LikeOutlined />} value={56} />
+                                    <Statistic prefix={<LikeOutlined />} value={totalPaper} />
                                 </Card>
                             </Col>
                             <Col span={8}>
@@ -57,7 +88,7 @@ class app extends Component {
                                         进入查看
                                     </Link>
                                 }>
-                                    <Statistic prefix={<LikeOutlined />} value={8} />
+                                    <Statistic prefix={<LikeOutlined />} value={totalSubject} />
                                 </Card>
                             </Col>
                         </Row>
@@ -68,7 +99,7 @@ class app extends Component {
                                         进入查看
                                     </Link>
                                 }>
-                                    <Statistic prefix={<LikeOutlined />} value={123} />
+                                    <Statistic prefix={<LikeOutlined />} value={totalKnowledge} />
                                 </Card>
                             </Col>
                             <Col span={8}>
@@ -77,7 +108,7 @@ class app extends Component {
                                         进入查看
                                     </Link>
                                 }>
-                                    <Statistic prefix={<LikeOutlined />} value={1221} />
+                                    <Statistic prefix={<LikeOutlined />} value={totalUser} />
                                 </Card>
                             </Col>
                         </Row>

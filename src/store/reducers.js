@@ -157,9 +157,12 @@ const problems = (state = {
 
 const papers = (state = {
     autoMaticPaperSuccess: false,
+    modifyPaperSuccess: false,
     paperAttribute: {},
     paperDetails: {},
     problemList: [],
+    paperList: [],
+    totalPaperCount: [],
 }, action) => {
     switch (action.type) {
         case actionType.DETAILS_PAPER:
@@ -167,6 +170,17 @@ const papers = (state = {
                 paperAttribute: action.paperAttribute,
                 paperDetails: action.paperDetails,
                 problemList: action.problemList,
+            });
+            return state;
+        case actionType.PAPER_LIST:
+            state = Object.assign({}, state, {
+                paperList: action.paperList,
+                totalPaperCount: action.totalPaperCount,
+            });
+            return state;
+        case actionType.MODIFY_PAPER:
+            state = Object.assign({}, state, {
+                modifyPaperSuccess: action.modifyPaperSuccess,
             });
             return state;
         default:

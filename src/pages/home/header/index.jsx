@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Menu } from 'antd';
 import { SettingOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
-import image from "../../../assets/images/logo.png";
+import image from "../../../assets/images/logo2.png";
 const { SubMenu } = Menu;
 export default class app extends Component {
     constructor(props){

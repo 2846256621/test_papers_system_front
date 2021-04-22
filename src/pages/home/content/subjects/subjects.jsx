@@ -274,7 +274,8 @@ class app extends Component {
         const { subjectsList, totalSubjectCount } = this.props;
         return (
             <div style={{ padding: 10 }} className="subject-list">
-                <Card title={
+                <Card
+                    title={
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>自动组卷系统</Breadcrumb.Item>
                         <Breadcrumb.Item>后台管理</Breadcrumb.Item>

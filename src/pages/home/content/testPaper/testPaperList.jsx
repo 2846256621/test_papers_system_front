@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     Table,
     Tag,
@@ -12,9 +13,12 @@ import {
     Select,
     Button,
     DatePicker,
+    Pagination,
+    Tooltip,
 } from 'antd';
 import { ExclamationCircleOutlined, EyeOutlined, FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
+import papers from "../../../../store/actions/papers";
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
@@ -27,25 +31,7 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 14 },
 };
-const data = [{
-    id: 1,
-    testPaperName: '测试试卷',
-    subject: '语文',
-    startTime:'2020-01-13 20:00:00',
-    endTime: '2020-01-13 21:00:00',
-    score: '60',
-    difficulty: '0.8',
-    knowledgePoints: ['nice', 'wow'],
-}, {
-    id: 2,
-    testPaperName: '测试试卷',
-    subject: '语文',
-    startTime:'2020-01-13 20:00:00',
-    endTime: '2020-01-13 21:00:00',
-    score: '60',
-    difficulty: '0.8',
-    knowledgePoints: ['nice', 'wowowwowwowwowwowwowwowwowwowwowwowwoww','nicewowwowwowwow', 'wow','nice', 'wow','nwowwowwowice', 'wow','nice', 'wow','nice', 'wow','nice', 'wow','nice', 'wow','nice', 'wow','nice', 'wowowwowwoww','nice', 'wowwowwowwowwow','nice', 'wow','nice', 'wow'],
-}];
+
 class app extends Component {
     constructor(props){
         super(props);
@@ -55,10 +41,22 @@ class app extends Component {
                 subject: '',
             },
             check: {},
-            modalFormDate: {},
+            modalFormDate: {
+                examName: "",
+                startTime: "",
+                endTime: "",
+            },
             userId: window.localStorage.getItem('userId'),
             type: window.localStorage.getItem('type'),
+            pageSize: 10,
+            currentPage: 1,
         }
+    }
+
+    componentDidMount(){
+        const { getPaperList } = this.props;
+        const { formData, pageSize, currentPage } = this.state;
+        getPaperList({...formData, pageSize, currentPage});
     }
 
     getColumns = () => {
@@ -67,66 +65,91 @@ class app extends Component {
                 title: '试卷ID',
                 dataIndex: 'id',
                 key: 'id',
-                width:80,
+                width:50,
             },
             {
                 title: '试卷名称',
                 dataIndex: 'testPaperName',
                 key: 'testPaperName',
-                width:160,
+                width:100,
             },
             {
                 title: '所属课程',
                 dataIndex: 'subject',
                 key: 'subject',
-                width:120,
+                width:100,
             },
             {
                 title: '开始时间',
                 dataIndex: 'startTime',
                 key: 'startTime',
-                width:200,
+                width:100,
             },
             {
                 title: '结束时间',
-                key: 'startTime',
+                key: 'endTime',
                 dataIndex: 'startTime',
-                width:200,
+                width:100,
             },
             {
                 title: '总分',
                 key: 'score',
                 dataIndex: 'score',
-                width:100,
+                width:60,
             },
             {
                 title: '难度',
                 key: 'difficulty',
                 dataIndex: 'difficulty',
-                width:100,
+                width:60,
             },
             {
                 title: '包含知识点',
                 dataIndex: 'knowledgePoints',
                 key: 'knowledgePoints',
                 width:370,
-                render: tags => (
-                    <>
-                        {tags.map((tag, index) => {
+                render: tags => {
+                   return (
+                        tags.length > 10 ?
+                        <Tooltip
+                            placement="topLeft" 
+                            title={
+                                tags.map((tag, index) => {
+                                    return (
+                                        <Tag color='purple' key={`${tag}`}>
+                                            {tag}
+                                        </Tag>
+                                    );
+                                })
+                            }
+                            arrowPointAtCenter
+                        >
+                            {
+                                tags.slice(0,10).map((tag, index) => {
+                                    return (
+                                        <Tag color='purple' key={`${tag}`}>
+                                            {tag}
+                                        </Tag>
+                                    );
+                                }) 
+                            }
+                            <span>......</span>
+                        </Tooltip> : 
+                        tags.map((tag, index) => {
                             return (
-                                <Tag color='volcano' key={`${tag}_${index}`}>
+                                <Tag color='purple' key={`${tag}`}>
                                     {tag}
                                 </Tag>
                             );
-                        })}
-                    </>
-                ),
+                        })
+                   )
+                },
             },
             {
                 title: '操作',
                 key: '',
                 fixed: 'right',
-                width: 180,
+                width: 100,
                 render: (text, record) => {
                     const { userId, type } = this.state;
                     return (
@@ -186,7 +209,9 @@ class app extends Component {
 
     // 提交查询
     onSubmit = () => {
-        console.log('submit提交表单',this.state.formData);
+        const { getPaperList } = this.props;
+        const { formData, pageSize, currentPage } = this.state;
+        getPaperList({...formData, pageSize, currentPage});
     }
 
     // 删除试卷
@@ -194,15 +219,18 @@ class app extends Component {
         confirm({
             title: '系统提示',
             icon: <ExclamationCircleOutlined />,
-            content: `确定要删除试卷${id}吗？`,
+            content: `确定要删除此试卷吗？`,
             style: { marginTop: 150 },
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
-            onOk() {
-              console.log('OK');
+            onOk: () => {
+                const { dropPaper, getPaperList } = this.props;
+                const { formData, pageSize, currentPage } = this.state;
+                dropPaper({examId: id, userId: window.localStorage.getItem('userId')});
+                getPaperList({...formData, pageSize, currentPage});
             },
-            onCancel() {
+            onCancel: () => {
               console.log('Cancel');
             },
         });
@@ -225,12 +253,12 @@ class app extends Component {
                 >
                     <Form.Item
                         label="试卷名称"
-                        name="testPaperName"
+                        name="examName"
                     >
                         <Input
                             placeholder="请输入试卷名称"
                             value={tempRecord.testPaperName}
-                            onChange={ (e) => { this.handleChangeModalItem('testPaperName', e)}}
+                            onChange={ (e) => { this.handleChangeModalItem('examName', e.target.value)}}
                         />
                     </Form.Item>
                     <Form.Item
@@ -285,11 +313,41 @@ class app extends Component {
      onOkModify = (record) => {
         const { modalFormDate } = this.state;
         // 请求返回之后，modalFormDate清空
-        console.log(modalFormDate);
+        console.log('夕阳红',modalFormDate, record);
+        const { modifyPaper } = this.props;
+        modifyPaper({...modalFormDate, examId: record.id});
+        setTimeout(() => {
+            const { modifyPaperSuccess } = this.props;
+            if(modifyPaperSuccess){
+                const { getPaperList } = this.props;
+                const { currentPage, pageSize } = this.state;
+                getPaperList({currentPage, pageSize});
+                this.setState({
+                    modalFormDate: {
+                        examName: "",
+                        startTime: "",
+                        endTime: "",
+                    }
+                });
+            }
+        }, 500);
+
+    }
+
+    onChangePage = (page, pageSize) => {
+        this.setState({
+            currentPage: page,
+            pageSize,
+        }, () => {
+            const { getPaperList } = this.props;
+            const { currentPage, pageSize } = this.state;
+            getPaperList({currentPage, pageSize});
+        });
     }
 
     render() {
-        const { formData } = this.state;
+        const { formData, currentPage, pageSize } = this.state;
+        const { paperList, totalPaperCount } = this.props;
         return (
             <div style={{ padding: 10 }} className="test-paper-list">
                 <Card title={
@@ -347,8 +405,18 @@ class app extends Component {
                             bordered
                             style={{ marginTop: 20 }}
                             columns={this.getColumns()}
-                            dataSource={data}
+                            dataSource={paperList}
                             scroll={{ x: 1800 }}
+                            pagination={false}
+                        />
+                        <Pagination
+                            style={{ float: 'right', marginTop: 20}}
+                            showQuickJumper
+                            showSizeChanger={true}
+                            current={currentPage}
+                            total={totalPaperCount}
+                            pageSize={pageSize}
+                            onChange={this.onChangePage}
                         />
                     </Content>
                 </Card>
@@ -357,4 +425,19 @@ class app extends Component {
     }
 }
 
-export default WrappedComponent(app);
+const mapStateToProps = state => ({
+    paperList: state.papers.paperList,
+    totalPaperCount: state.papers.totalPaperCount,
+    modifyPaperSuccess: state.papers.modifyPaperSuccess,
+});
+ 
+const mapDispatchToProps = dispatch => ({
+    getPaperList: (params) => dispatch(papers.getPaperList(params)),
+    dropPaper: (params) => dispatch(papers.dropPaper(params)),
+    modifyPaper: (params) => dispatch(papers.modifyPaper(params)),
+});
+ 
+export default WrappedComponent(connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(app));

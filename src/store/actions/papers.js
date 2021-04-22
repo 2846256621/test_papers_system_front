@@ -33,23 +33,19 @@ const actions = {
     },
 
 
-    updatePaper: params => dispatch => {
+    getPaperList: params => dispatch => {
         const options = {
             method: 'post',
-            api: APIS.updatePaper,
+            api: APIS.getpaperList,
             params,
             contentType: 'json',
         };
         $ajax.common(options).then((res) => {
             if (res.code === 10000) {
-                message.success({
-                    content: res.message,
-                    className: 'custom-class',
-                    style: {marginTop: '30vh'},
-                });
                 dispatch({
-                    type: actionType.UPDATE_POINT,
-                    pointUpdateSuccess: true,
+                    type: actionType.PAPER_LIST,
+                    paperList: res.data.dataList,
+                    totalPaperCount: res.data.totalCount,
                 });
             } else {
                 message.error({
@@ -77,6 +73,36 @@ const actions = {
                     content: res.message,
                     className: 'custom-class',
                     style: {marginTop: '30vh'},
+                });
+            } else {
+                message.error({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+        });
+    },
+    modifyPaper: params => (dispatch) => {
+        const options = {
+            method: 'post',
+            api: APIS.modifyPaper,
+            params,
+            contentType: 'json',
+        };
+        $ajax.common(options).then((res) => {
+            if (res.code === 10000) {
+                message.success({
+                    content: res.message,
+                    className: 'custom-class',
+                    style: {marginTop: '30vh'},
+                });
+                dispatch({
+                    type: actionType.MODIFY_PAPER,
+                    modifyPaperSuccess: true,
                 });
             } else {
                 message.error({

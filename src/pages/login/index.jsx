@@ -92,7 +92,7 @@ class app extends Component {
         const { formData, date, verificationCode } = this.state;
         return (
             <Card
-                title="欢迎登录自动组卷系统"
+                title="欢迎登录邮易自动组卷系统"
                 extra={<Link to='/signIn'>去注册</Link>}
                 id="login-container"
             >

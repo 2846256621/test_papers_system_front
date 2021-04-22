@@ -37,5 +37,11 @@ const APIS = {
     // 试卷管理
     automaticPaper: `${target}/paper/makePaper`,
     detailsPaper: `${target}/paper/paperDetails`,
+    getpaperList: `${target}/paper/paperList`,
+    dropPaper: `${target}/paper/dropPaper`,
+    modifyPaper: `${target}/paper/modifyPaper`,
+
+    // 首页
+    home: `${target}/home/statistic`,
 }
 export default APIS;
