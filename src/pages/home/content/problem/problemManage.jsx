@@ -641,7 +641,7 @@ class app extends Component {
                         >
                             返回题目列表
                         </Button>
-                    }    
+                    }
                 >
                     <Content
                         className="site-layout-background"

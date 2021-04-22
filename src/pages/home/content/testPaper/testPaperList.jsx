@@ -19,6 +19,7 @@ import {
 import { ExclamationCircleOutlined, EyeOutlined, FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
 import papers from "../../../../store/actions/papers";
+import subjects from '../../../../store/actions/subjects';
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
@@ -54,9 +55,10 @@ class app extends Component {
     }
 
     componentDidMount(){
-        const { getPaperList } = this.props;
+        const { getPaperList, getSubjects } = this.props;
         const { formData, pageSize, currentPage } = this.state;
         getPaperList({...formData, pageSize, currentPage});
+        getSubjects();
     }
 
     getColumns = () => {
@@ -257,7 +259,7 @@ class app extends Component {
                     >
                         <Input
                             placeholder="请输入试卷名称"
-                            value={tempRecord.testPaperName}
+                            value={tempRecord.examName}
                             onChange={ (e) => { this.handleChangeModalItem('examName', e.target.value)}}
                         />
                     </Form.Item>
@@ -347,7 +349,7 @@ class app extends Component {
 
     render() {
         const { formData, currentPage, pageSize } = this.state;
-        const { paperList, totalPaperCount } = this.props;
+        const { paperList, totalPaperCount, subjectsList } = this.props;
         return (
             <div style={{ padding: 10 }} className="test-paper-list">
                 <Card title={
@@ -367,13 +369,13 @@ class app extends Component {
                         >
                             <Form.Item
                                 label="试卷名称"
-                                name="testPaperName"
+                                name="examName"
                             >
                                 <Input
                                     placeholder="请输入试卷名称"
                                     style={{ width: 180 }}
-                                    value={formData.testPaperName}
-                                    onChange={(e) => this.handleChangeItem('testPaperName', e.target.value)}
+                                    value={formData.examName}
+                                    onChange={(e) => this.handleChangeItem('examName', e.target.value)}
                                 />
                             </Form.Item>
                             <Form.Item
@@ -387,9 +389,13 @@ class app extends Component {
                                     onChange={(e) => this.handleChangeItem('subject', e)}
                                 >
                                     <Option value="">全部</Option>
-                                    <Option value="1">数学</Option>
-                                    <Option value="2">语文</Option>
-                                    <Option value="3">英语</Option>
+                                    {
+                                        subjectsList.map((item) => {
+                                            return (
+                                                <Option value={item.subjectId}>{item.subjectName}</Option>
+                                            )
+                                        })
+                                    }
                                 </Select>
                             </Form.Item>
                             <Form.Item>
@@ -429,9 +435,11 @@ const mapStateToProps = state => ({
     paperList: state.papers.paperList,
     totalPaperCount: state.papers.totalPaperCount,
     modifyPaperSuccess: state.papers.modifyPaperSuccess,
+    subjectsList: state.subjects.subjectsList,
 });
  
 const mapDispatchToProps = dispatch => ({
+    getSubjects: params => dispatch(subjects.getSubjects(params)),
     getPaperList: (params) => dispatch(papers.getPaperList(params)),
     dropPaper: (params) => dispatch(papers.dropPaper(params)),
     modifyPaper: (params) => dispatch(papers.modifyPaper(params)),
