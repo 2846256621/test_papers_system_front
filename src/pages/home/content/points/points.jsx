@@ -205,88 +205,97 @@ class app extends Component {
         console.log(record);
         const { modalFormDate } = this.state;
         const { subjectsList } = this.props;
-        return (
-            confirm({
-                title: type === 'modify' ? '修改知识点' : '增加知识点',
-                icon: <ExclamationCircleOutlined />,
-                content: (
-                    <Form
-                        {...layout}
-                        name="basic"
-                        layout="Horizontal"
-                        initialValues={record}
-                    >
-                        <Form.Item
-                            label="知识点所属课程"
-                            name="subjectName"
+        const userId = window.localStorage.getItem('userId');
+        if (!userId) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            return (
+                confirm({
+                    title: type === 'modify' ? '修改知识点' : '增加知识点',
+                    icon: <ExclamationCircleOutlined />,
+                    content: (
+                        <Form
+                            {...layout}
+                            name="basic"
+                            layout="Horizontal"
+                            initialValues={record}
                         >
-                            <Select
-                                placeholder="请选择课程"
-                                value={modalFormDate.subjectName}
-                                onChange={(e) => { this.handleChangeModalItem('subjectId', this.handleSelectPointId(e))}}
+                            <Form.Item
+                                label="知识点所属课程"
+                                name="subjectName"
                             >
-                                {
-                                    subjectsList.map(item => (
-                                        <Option value={item.subjectName}>{item.subjectName}</Option>
-                                    ))
-                                }
-                            </Select>
-                        </Form.Item>
-                        <Form.Item
-                            label="所属章节"
-                            name="chapter"
-                        >
-                            <Select
-                                placeholder="请选择所属章节"
-                                value={modalFormDate.chapter}
-                                onChange={ (e) => { this.handleChangeModalItem('chapter', e)}}
+                                <Select
+                                    placeholder="请选择课程"
+                                    value={modalFormDate.subjectName}
+                                    onChange={(e) => { this.handleChangeModalItem('subjectId', this.handleSelectPointId(e))}}
+                                >
+                                    {
+                                        subjectsList.map(item => (
+                                            <Option value={item.subjectName}>{item.subjectName}</Option>
+                                        ))
+                                    }
+                                </Select>
+                            </Form.Item>
+                            <Form.Item
+                                label="所属章节"
+                                name="chapter"
                             >
-                                <Option value={"第一章"}>第一章</Option>
-                                <Option value={"第二章"}>第二章</Option>
-                                <Option value={"第三章"}>第三章</Option>
-                                <Option value={"第四章"}>第四章</Option>
-                                <Option value={"第五章"}>第五章</Option>
-                                <Option value={"第六章"}>第六章</Option>
-                                <Option value={"第七章"}>第七章</Option>
-                                <Option value={"第八章"}>第八章</Option>
-                                <Option value={"第九章"}>第九章</Option>
-                                <Option value={"第十章"}>第十章</Option>
-                                <Option value={"第十一章"}>第十一章</Option>
-                                <Option value={"第十二章"}>第十二章</Option>
-                                <Option value={"第十三章"}>第十三章</Option>
-                                <Option value={"第十四章"}>第十四章</Option>
-                                <Option value={"第十五章"}>第十五章</Option>
-                                <Option value={"第十六章"}>第十六章</Option>
-                                <Option value={"第十七章"}>第十七章</Option>
-                                <Option value={"第十八章"}>第十八章</Option>
-                                <Option value={"第十九章"}>第十九章</Option>
-                                <Option value={"第二十章"}>第二十章</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item
-                            label="知识点名称"
-                            name="pointName"
-                        >
-                            <Input
-                                placeholder="请输入知识点名称"
-                                value={modalFormDate.pointName}
-                                onChange={ (e) => { this.handleChangeModalItem('pointName', e.target.value)}}
-                            />
-                        </Form.Item>
-                    </Form>
-                ),
-                style: { marginTop: 150 },
-                okText: '保存',
-                okType: 'danger',
-                cancelText: '取消',
-                onOk: () => {
-                    this.onOkModify(type, record);
-                },
-                onCancel: () => {
-                    console.log('不保存')
-                },
-            })      
-        )
+                                <Select
+                                    placeholder="请选择所属章节"
+                                    value={modalFormDate.chapter}
+                                    onChange={ (e) => { this.handleChangeModalItem('chapter', e)}}
+                                >
+                                    <Option value={"第一章"}>第一章</Option>
+                                    <Option value={"第二章"}>第二章</Option>
+                                    <Option value={"第三章"}>第三章</Option>
+                                    <Option value={"第四章"}>第四章</Option>
+                                    <Option value={"第五章"}>第五章</Option>
+                                    <Option value={"第六章"}>第六章</Option>
+                                    <Option value={"第七章"}>第七章</Option>
+                                    <Option value={"第八章"}>第八章</Option>
+                                    <Option value={"第九章"}>第九章</Option>
+                                    <Option value={"第十章"}>第十章</Option>
+                                    <Option value={"第十一章"}>第十一章</Option>
+                                    <Option value={"第十二章"}>第十二章</Option>
+                                    <Option value={"第十三章"}>第十三章</Option>
+                                    <Option value={"第十四章"}>第十四章</Option>
+                                    <Option value={"第十五章"}>第十五章</Option>
+                                    <Option value={"第十六章"}>第十六章</Option>
+                                    <Option value={"第十七章"}>第十七章</Option>
+                                    <Option value={"第十八章"}>第十八章</Option>
+                                    <Option value={"第十九章"}>第十九章</Option>
+                                    <Option value={"第二十章"}>第二十章</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item
+                                label="知识点名称"
+                                name="pointName"
+                            >
+                                <Input
+                                    placeholder="请输入知识点名称"
+                                    value={modalFormDate.pointName}
+                                    onChange={ (e) => { this.handleChangeModalItem('pointName', e.target.value)}}
+                                />
+                            </Form.Item>
+                        </Form>
+                    ),
+                    style: { marginTop: 150 },
+                    okText: '保存',
+                    okType: 'danger',
+                    cancelText: '取消',
+                    onOk: () => {
+                        this.onOkModify(type, record);
+                    },
+                    onCancel: () => {
+                        console.log('不保存')
+                    },
+                })      
+            )
+        }
     }
 
     // 根据知识点名称匹配知识点id

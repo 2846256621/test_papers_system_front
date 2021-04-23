@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Layout } from 'antd';
 import Nav from '../../nav';
 import Head from '../../header';
@@ -13,7 +13,7 @@ export default (WrappedComponent) => {
             return (
                 <Layout>
                     <Header style={{ paddingLeft: 5, paddingRight: 10, height: 70 }}>
-                        <Head />
+                        <Head {...this.props}/>
                     </Header>
                     <Layout>
                         <Sider width={200} style={{ backgroundColor: '#fff'}}>

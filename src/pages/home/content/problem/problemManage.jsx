@@ -561,42 +561,48 @@ class app extends Component {
         const check = this.onCheck();
         if (Object.values(check).filter((item) => !!item).length > 0) return null;
         console.log('submit提交表单',this.state.formData);
-        const { addProblem, modifyProblem } = this.props;
-        const { formData, type, problemId, problemType } = this.state;
-        switch(type) {
-            case 'add':
-                addProblem({...formData, answer: formData.answer.toString()});
-                setTimeout(() => {
-                    const { problemAddSuccess } = this.props;
-                    if(problemAddSuccess) {
-                        const { formDataTemp } = this.state;
-                        this.setState({
-                            formData: formDataTemp
-                        });
-                    }
-                }, 500);
-                break;
-            case 'modify':
-                modifyProblem({
-                    ...this.state.formData,
-                    answer: this.state.formData.answer.toString(),
-                    problemId,
-                });
-                setTimeout(() => {
-                    const { problemModifySuccess } = this.props;
-                    if(problemModifySuccess) {
-                        message.success({
-                            content:'修改成功',
-                            style: {marginTop: '30vh'},
-                        });
-                    }
-                }, 500);
-                break;
-                break;
-            default:
-                break;
+        if (!window.localStorage.getItem('userId')) {
+            message.error({
+                content: '无法保存，请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            const { addProblem, modifyProblem } = this.props;
+            const { formData, type, problemId, problemType } = this.state;
+            switch(type) {
+                case 'add':
+                    addProblem({...formData, answer: formData.answer.toString()});
+                    setTimeout(() => {
+                        const { problemAddSuccess } = this.props;
+                        if(problemAddSuccess) {
+                            const { formDataTemp } = this.state;
+                            this.setState({
+                                formData: formDataTemp
+                            });
+                        }
+                    }, 500);
+                    break;
+                case 'modify':
+                    modifyProblem({
+                        ...this.state.formData,
+                        answer: this.state.formData.answer.toString(),
+                        problemId,
+                    });
+                    setTimeout(() => {
+                        const { problemModifySuccess } = this.props;
+                        if(problemModifySuccess) {
+                            message.success({
+                                content:'修改成功',
+                                style: {marginTop: '30vh'},
+                            });
+                        }
+                    }, 500);
+                    break;
+                default:
+                    break;
+            }
         }
-        
     }
     
     // 渲染不同模板

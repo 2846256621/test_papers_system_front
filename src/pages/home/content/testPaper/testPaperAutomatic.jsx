@@ -218,42 +218,49 @@ class app extends Component {
 
     // 开始组卷
     startAutomatic = () => {
-        console.log('开始组卷');
-        const { testPaperInfo, problemTypeInfo } = this.state;
-        const tempTestPaperInfo = testPaperInfo;
-        tempTestPaperInfo.problemTypeInfo = problemTypeInfo;
-        this.setState({
-            testPaperInfo: tempTestPaperInfo,
-        }, () => {
-            const check = this.onCheck();
-            const { testPaperInfo } = this.state;
-            if (Object.values(check).filter((item) => !!item).length > 0) return null;
-            if (testPaperInfo.problemTypeInfo.length === 0) {
-                message.error({
-                    content: '请先选择试卷包含题型，再开始组卷!',
-                    className: 'custom-class',
-                    style: {marginTop: '30vh'},
-                });
-            }
-            $ajax.common({
-                method: 'post',
-                api: APIS.automaticPaper,
-                params: {...testPaperInfo, userId: window.localStorage.getItem('userId')},
-                contentType: 'json',
-            }).then(res => {
-                if (res.code === 10000 && res.success === true) { 
-                    this.props.history.push(`/testPaperDetails?id=${res.data}`);
-                } else {
+        if (!window.localStorage.getItem('userId')) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            const { testPaperInfo, problemTypeInfo } = this.state;
+            const tempTestPaperInfo = testPaperInfo;
+            tempTestPaperInfo.problemTypeInfo = problemTypeInfo;
+            this.setState({
+                testPaperInfo: tempTestPaperInfo,
+            }, () => {
+                const check = this.onCheck();
+                const { testPaperInfo } = this.state;
+                if (Object.values(check).filter((item) => !!item).length > 0) return null;
+                if (testPaperInfo.problemTypeInfo.length === 0) {
                     message.error({
-                        content: res.message,
+                        content: '请先选择试卷包含题型，再开始组卷!',
                         className: 'custom-class',
                         style: {marginTop: '30vh'},
                     });
                 }
-            }).catch(err => {
-                console.log(err);
+                $ajax.common({
+                    method: 'post',
+                    api: APIS.automaticPaper,
+                    params: {...testPaperInfo, userId: window.localStorage.getItem('userId')},
+                    contentType: 'json',
+                }).then(res => {
+                    if (res.code === 10000 && res.success === true) { 
+                        this.props.history.push(`/testPaperDetails?id=${res.data}`);
+                    } else {
+                        message.error({
+                            content: res.message,
+                            className: 'custom-class',
+                            style: {marginTop: '30vh'},
+                        });
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
             });
-        });
+        }
     }
 
     render() {

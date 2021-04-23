@@ -186,39 +186,48 @@ class app extends Component {
     // 添加或修改弹窗
     subjectManageModal = (type, record) => {
         const { formData } = this.state;
-        return (
-            confirm({
-                title: type === 'modify' ? '修改课程' : '增加课程',
-                icon: <ExclamationCircleOutlined />,
-                content: (
-                    <Form
-                        name="basic"
-                        layout="Horizontal"
-                        initialValues={record}
-                    >
-                        <Form.Item
-                            label="课程名称"
-                            name="subjectName"
+        const userId = window.localStorage.getItem('userId');
+        if (!userId) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            return (
+                confirm({
+                    title: type === 'modify' ? '修改课程' : '增加课程',
+                    icon: <ExclamationCircleOutlined />,
+                    content: (
+                        <Form
+                            name="basic"
+                            layout="Horizontal"
+                            initialValues={record}
                         >
-                            <Input
-                                placeholder="请输入课程名称"
-                                value={formData.subjectName}
-                                onChange={ (e) => { this.handleChangeModalItem('subjectName', e.target.value)}}
-                            />
-                        </Form.Item>
-                    </Form>
-                ),
-                style: { marginTop: 150 },
-                okText: '保存',
-                cancelText: '取消',
-                onOk: () => {
-                    this.onOkModify(type, record);
-                },
-                onCancel: () => {
-                    console.log('不保存')
-                },
-            })      
-        )
+                            <Form.Item
+                                label="课程名称"
+                                name="subjectName"
+                            >
+                                <Input
+                                    placeholder="请输入课程名称"
+                                    value={formData.subjectName}
+                                    onChange={ (e) => { this.handleChangeModalItem('subjectName', e.target.value)}}
+                                />
+                            </Form.Item>
+                        </Form>
+                    ),
+                    style: { marginTop: 150 },
+                    okText: '保存',
+                    cancelText: '取消',
+                    onOk: () => {
+                        this.onOkModify(type, record);
+                    },
+                    onCancel: () => {
+                        console.log('不保存')
+                    },
+                })      
+            )
+        }
     }
 
 

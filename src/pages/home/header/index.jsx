@@ -38,15 +38,26 @@ export default class app extends Component {
                     </Menu.Item>
                     <SubMenu key="3"
                         icon={<SettingOutlined />}
-                        title={`欢迎你，${username}`}
+                        title={username ? `欢迎你，${username}` : '欢迎你，请先登录'}
                         style={{ float: 'right'}}
                     >
-                        <Menu.Item
-                            key="setting:2"
-                            onClick={() => { this.handleLogOut()}}
-                        >
-                                退出登录
-                        </Menu.Item>
+                        {
+                            !username ? 
+                                <Menu.Item
+                                    key="setting:2"
+                                    onClick={() => { this.props.history.push('/login')}}
+                                >
+                                        登录
+                                </Menu.Item>
+                                :
+                                <Menu.Item
+                                    key="setting:2"
+                                    onClick={() => { this.handleLogOut()}}
+                                >
+                                        退出登录
+                                </Menu.Item>
+                            }
+                        
                     </SubMenu>
                 </Menu>
             </div>

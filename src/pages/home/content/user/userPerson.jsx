@@ -106,9 +106,17 @@ class app extends Component {
                                     <Button
                                         type="primary"
                                         onClick={() => {
-                                            this.setState({
-                                                usernameDisabled: false,
-                                            });
+                                            if (!window.localStorage.getItem('userId')) {
+                                                message.error({
+                                                    content: '请先登录，再进行添加操作！',
+                                                    className: 'custom-class',
+                                                    style: {marginTop: '30vh'},
+                                                });
+                                            } else {
+                                                this.setState({
+                                                    usernameDisabled: false,
+                                                });
+                                            }
                                         }}
                                     >
                                         修改用户名
@@ -116,9 +124,17 @@ class app extends Component {
                                     <Button
                                         type="primary"
                                         onClick={() => {
-                                            this.setState({
-                                                passwordDisabled: false,
-                                            });
+                                            if (!window.localStorage.getItem('userId')) {
+                                                message.error({
+                                                    content: '请先登录，再进行添加操作！',
+                                                    className: 'custom-class',
+                                                    style: {marginTop: '30vh'},
+                                                });
+                                            } else {
+                                                this.setState({
+                                                    passwordDisabled: false,
+                                                });
+                                            }
                                         }}
                                     >
                                         修改密码

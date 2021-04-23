@@ -11,6 +11,7 @@ import {
     Card,
     Modal,
     Pagination,
+    message
 } from 'antd';
 import { connect } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -56,29 +57,37 @@ class app extends Component {
 
     // 禁用或启用用户
     onDisableUser = (id, auth) => {
-        confirm({
-            title: '系统提示',
-            icon: <ExclamationCircleOutlined />,
-            content:`注意禁用后用户将不能再登录系统，启用后可继续使用确定要${auth ? '启用' : '禁用'}用户${id}吗？`,
-            style: { marginTop: 150 },
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk: () => {
-                // 确认之后，直接返回登录页
-                const { forbidUser } = this.props;
-                forbidUser({id, status: +(!auth)});
-                setTimeout( () => {
-                    const { userForbidSuccess } = this.props;
-                    if (userForbidSuccess) {
-                        this.handleGetUserList();
-                    }
-                }, 500);
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-          });
+        if (!window.localStorage.getItem('userId')) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            confirm({
+                title: '系统提示',
+                icon: <ExclamationCircleOutlined />,
+                content:`注意禁用后用户将不能再登录系统，启用后可继续使用确定要${auth ? '启用' : '禁用'}用户${id}吗？`,
+                style: { marginTop: 150 },
+                okText: '确认',
+                okType: 'danger',
+                cancelText: '取消',
+                onOk: () => {
+                    // 确认之后，直接返回登录页
+                    const { forbidUser } = this.props;
+                    forbidUser({id, status: +(!auth)});
+                    setTimeout( () => {
+                        const { userForbidSuccess } = this.props;
+                        if (userForbidSuccess) {
+                            this.handleGetUserList();
+                        }
+                    }, 500);
+                },
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+        }
     }
     getColumns = () => {
         return [
@@ -236,50 +245,58 @@ class app extends Component {
     // 添加或修改弹窗
     userManageModal = (type, record) => {
         const { modalFormDate } = this.state;
-        return (
-            confirm({
-                title: type === 'modify' ? '修改用户信息' : '增加用户',
-                icon: <ExclamationCircleOutlined />,
-                content: (
-                    <Form
-                        name="basic"
-                        layout="Horizontal"
-                        initialValues={record}
-                    >
-                        <Form.Item
-                            label={type === 'add' ? "初始用户名": "修改用户名"}
-                            name="userName"
+        if (!window.localStorage.getItem('userId')) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            return (
+                confirm({
+                    title: type === 'modify' ? '修改用户信息' : '增加用户',
+                    icon: <ExclamationCircleOutlined />,
+                    content: (
+                        <Form
+                            name="basic"
+                            layout="Horizontal"
+                            initialValues={record}
                         >
-                            <Input
-                                placeholder="请输入用户名"
-                                value={modalFormDate.userName}
-                                onChange={ (e) => { this.handleChangeModalItem('userName', e.target.value)}}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label={type === 'add' ? "初始密码": "重置密码"}
-                            name="passWord"
-                        >
-                            <Input
-                                placeholder="请输入密码"
-                                value={modalFormDate.passWord}
-                                onChange={ (e) => { this.handleChangeModalItem('passWord', e.target.value)}}
-                            />
-                        </Form.Item>
-                    </Form>
-                ),
-                style: { marginTop: 150 },
-                okText: '保存',
-                okType: 'danger',
-                cancelText: '取消',
-                onOk: () => {
-                    this.onOkModify(type, record);
-                },
-                onCancel: () => {
-                    console.log('不保存')
-                },
-            })      
-        )
+                            <Form.Item
+                                label={type === 'add' ? "初始用户名": "修改用户名"}
+                                name="userName"
+                            >
+                                <Input
+                                    placeholder="请输入用户名"
+                                    value={modalFormDate.userName}
+                                    onChange={ (e) => { this.handleChangeModalItem('userName', e.target.value)}}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label={type === 'add' ? "初始密码": "重置密码"}
+                                name="passWord"
+                            >
+                                <Input
+                                    placeholder="请输入密码"
+                                    value={modalFormDate.passWord}
+                                    onChange={ (e) => { this.handleChangeModalItem('passWord', e.target.value)}}
+                                />
+                            </Form.Item>
+                        </Form>
+                    ),
+                    style: { marginTop: 150 },
+                    okText: '保存',
+                    okType: 'danger',
+                    cancelText: '取消',
+                    onOk: () => {
+                        this.onOkModify(type, record);
+                    },
+                    onCancel: () => {
+                        console.log('不保存')
+                    },
+                })      
+            )
+        }
     }
 
     render() {

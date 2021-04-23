@@ -15,6 +15,7 @@ import {
     DatePicker,
     Pagination,
     Tooltip,
+    message
 } from 'antd';
 import { ExclamationCircleOutlined, EyeOutlined, FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import WrappedComponent from '../component/wrapComponent';
@@ -78,7 +79,7 @@ class app extends Component {
             {
                 title: '所属课程',
                 dataIndex: 'subject',
-                key: 'subject',
+                key: 'subject', 
                 width:100,
             },
             {
@@ -161,7 +162,6 @@ class app extends Component {
                                     type="primary"
                                     shape="circle" 
                                     icon={<EyeOutlined />}
-                                    onClick={() => {this.onModifyTestPaper(record)}}
                                 >
                                     {/* 查看 */}
                                 </Button>
@@ -218,24 +218,32 @@ class app extends Component {
 
     // 删除试卷
     onDelTestPaper = (id) => {
-        confirm({
-            title: '系统提示',
-            icon: <ExclamationCircleOutlined />,
-            content: `确定要删除此试卷吗？`,
-            style: { marginTop: 150 },
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk: () => {
-                const { dropPaper, getPaperList } = this.props;
-                const { formData, pageSize, currentPage } = this.state;
-                dropPaper({examId: id, userId: window.localStorage.getItem('userId')});
-                getPaperList({...formData, pageSize, currentPage});
-            },
-            onCancel: () => {
-              console.log('Cancel');
-            },
-        });
+        if (!window.localStorage.getItem('userId')) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            confirm({
+                title: '系统提示',
+                icon: <ExclamationCircleOutlined />,
+                content: `确定要删除此试卷吗？`,
+                style: { marginTop: 150 },
+                okText: '确认',
+                okType: 'danger',
+                cancelText: '取消',
+                onOk: () => {
+                    const { dropPaper, getPaperList } = this.props;
+                    const { formData, pageSize, currentPage } = this.state;
+                    dropPaper({examId: id, userId: window.localStorage.getItem('userId')});
+                    getPaperList({...formData, pageSize, currentPage});
+                },
+                onCancel: () => {
+                console.log('Cancel');
+                },
+            });
+        }
     }
 
     // 修改试卷
@@ -243,63 +251,71 @@ class app extends Component {
         let tempRecord = record;
         tempRecord.startTime = moment(record.startTime,'YYYY-MM-DD HH:mm:ss');
         tempRecord.endTime = moment(record.endTime,'YYYY-MM-DD HH:mm:ss');
-        confirm({
-            title: '修改试卷信息',
-            icon: <ExclamationCircleOutlined />,
-            content: (
-                <Form
-                    {...layout}
-                    name="basic"
-                    layout="Horizontal"
-                    initialValues={tempRecord}
-                >
-                    <Form.Item
-                        label="试卷名称"
-                        name="examName"
+        if (!window.localStorage.getItem('userId')) {
+            message.error({
+                content: '请先登录，再进行添加操作！',
+                className: 'custom-class',
+                style: {marginTop: '30vh'},
+            });
+        } else {
+            confirm({
+                title: '修改试卷信息',
+                icon: <ExclamationCircleOutlined />,
+                content: (
+                    <Form
+                        {...layout}
+                        name="basic"
+                        layout="Horizontal"
+                        initialValues={tempRecord}
                     >
-                        <Input
-                            placeholder="请输入试卷名称"
-                            value={tempRecord.examName}
-                            onChange={ (e) => { this.handleChangeModalItem('examName', e.target.value)}}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        label="开始时间"
-                        name="startTime"
-                    >
-                        <DatePicker
-                            showTime
-                            format="YYYY-MM-DD HH:mm:ss"
-                            value={tempRecord.startTime}
-                            locale={locale}
-                            onChange={ (time, timeString) => { this.handleChangeModalItem('startTime', timeString)}}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        label="结束时间"
-                        name="endTime"
-                    >
-                        <DatePicker
-                            showTime
-                            format="YYYY-MM-DD HH:mm:ss"
-                            value={tempRecord.endTime}
-                            locale={locale}
-                            onChange={ (time, timeString) => { this.handleChangeModalItem('endTime', timeString)}}
-                        />
-                    </Form.Item>
-                </Form>
-            ),
-            style: { marginTop: 150 },
-            okText: '保存',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk: () => {
-                this.onOkModify(record);
-            },
-            onCancel: () => {
-                console.log('不保存')
-            },
-        })
+                        <Form.Item
+                            label="试卷名称"
+                            name="examName"
+                        >
+                            <Input
+                                placeholder="请输入试卷名称"
+                                value={tempRecord.examName}
+                                onChange={ (e) => { this.handleChangeModalItem('examName', e.target.value)}}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="开始时间"
+                            name="startTime"
+                        >
+                            <DatePicker
+                                showTime
+                                format="YYYY-MM-DD HH:mm:ss"
+                                value={tempRecord.startTime}
+                                locale={locale}
+                                onChange={ (time, timeString) => { this.handleChangeModalItem('startTime', timeString)}}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="结束时间"
+                            name="endTime"
+                        >
+                            <DatePicker
+                                showTime
+                                format="YYYY-MM-DD HH:mm:ss"
+                                value={tempRecord.endTime}
+                                locale={locale}
+                                onChange={ (time, timeString) => { this.handleChangeModalItem('endTime', timeString)}}
+                            />
+                        </Form.Item>
+                    </Form>
+                ),
+                style: { marginTop: 150 },
+                okText: '保存',
+                okType: 'danger',
+                cancelText: '取消',
+                onOk: () => {
+                    this.onOkModify(record);
+                },
+                onCancel: () => {
+                    console.log('不保存')
+                },
+            })
+        }
     }
 
     handleChangeModalItem = (filedName, value) => {
@@ -315,7 +331,6 @@ class app extends Component {
      onOkModify = (record) => {
         const { modalFormDate } = this.state;
         // 请求返回之后，modalFormDate清空
-        console.log('夕阳红',modalFormDate, record);
         const { modifyPaper } = this.props;
         modifyPaper({...modalFormDate, examId: record.id});
         setTimeout(() => {
