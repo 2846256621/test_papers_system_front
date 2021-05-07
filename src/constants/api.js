@@ -22,7 +22,6 @@ const APIS = {
 
     // 用户管理
     addUser: `${target}/userAdmin/adminAddUser`,
-    updateUser: `${target}/userAdmin/updateUser`,
     getUser: `${target}/userAdmin/getUser`,
     forbidUser: `${target}/userAdmin/forbidUser`,
     getUserList:`${target}/userAdmin/getUserList`,

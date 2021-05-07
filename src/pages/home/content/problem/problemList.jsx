@@ -58,6 +58,18 @@ class app extends Component {
         getAllProblem({...formData, pageSize, currentPage});
     }
 
+     // 分页
+    onChangePage = (page, pageSize) => {
+        this.setState({
+            currentPage: page,
+            pageSize,
+        }, () => {
+            const { formData, pageSize, currentPage } = this.state;
+            const { getAllProblem } = this.props;
+            getAllProblem({...formData, pageSize, currentPage});
+        });
+    }
+
     // 删除题目
     onDelProblem = (problemId, problemType) => {
         confirm({
@@ -222,7 +234,7 @@ class app extends Component {
 
     render() {
         const { formData, check, currentPage, pageSize } = this.state;
-        const { subjectsList, pointsList, totalProblemCount, problemList } = this.props;
+        const { subjectsList, pointsList, totalProblemsCount, problemList } = this.props;
         return (
             <div style={{ padding: 10 }} className="problem-list">
                 <Card title={
@@ -255,11 +267,10 @@ class app extends Component {
                         />
                         <Pagination
                             style={{ float: 'right', marginTop: 20}}
-                            showQuickJumper
                             showSizeChanger={true}
                             current={currentPage}
                             defaultCurrent={1}
-                            total={totalProblemCount || 200}
+                            total={totalProblemsCount}
                             pageSize={pageSize}
                             onChange={this.onChangePage}
                         />
@@ -274,7 +285,7 @@ const mapStateToProps = (state) => ({
     subjectsList: state.subjects.subjectsList,
     pointsList: state.points.pointsList,
     problemList: state.problems.problemList,
-    totalProblemCount: state.problems.totalProblemCount,
+    totalProblemsCount: state.problems.totalProblemsCount,
     problemDropSuccess:  state.problems.problemDropSuccess,
 })
 

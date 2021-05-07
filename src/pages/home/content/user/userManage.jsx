@@ -113,11 +113,9 @@ class app extends Component {
                 title: '创建时间',
                 dataIndex: 'createTime',
                 key: 'createTime',
-            },
-            {
-                title: '最后一次登录时间',
-                dataIndex: 'lastLogTime',
-                key: 'lastLogTime',
+                render: (text, record) => (
+                    <span>{record.createTime.replace('T', ' ')}</span>
+                )
             },
             {
                 title: '操作',
@@ -143,11 +141,12 @@ class app extends Component {
         this.handleGetUserList();
     }
 
-    handleGetUserList = () => {
+    handleGetUserList = (data) => {
         const { pageSize, pageNum } = this.state;
         const params = {
             pageSize,
             currentPage: pageNum,
+            ...data
         };
         $ajax.common({
             method: 'get',
@@ -162,6 +161,7 @@ class app extends Component {
                     pageNum: currentPage,
                     totalCount: totalCount,
                     tableData: dataList,
+                    modalFormDate: {},
                 })
             }
         }).catch(err => {
@@ -187,7 +187,8 @@ class app extends Component {
 
 
     onSubmit = () => {
-        console.log('submit提交表单',this.state.formData);
+        console.log('submit提交表单',this.state.modalFormDate);
+        this.handleGetUserList(this.state.modalFormDate);
     }
 
 
@@ -202,7 +203,7 @@ class app extends Component {
     // 确认添加或修改
     onOkModify = (type, record) => {
         const { modalFormDate } = this.state;
-        const { addUser, updateUser} = this.props;
+        const { addUser, modifyUser} = this.props;
         if(type === 'add') {
             console.log('新增数据', type, modalFormDate);
             addUser(modalFormDate);
@@ -225,10 +226,10 @@ class app extends Component {
             const tempModalFormDate = Object.assign({}, record, modalFormDate,);
             console.log('修改数据',type,tempModalFormDate);
             // 请求返回之后，modalFormDate清空
-            updateUser(tempModalFormDate);
+            modifyUser(tempModalFormDate);
             setTimeout(() => {
-                const { userUpdateSuccess } = this.props;
-                if (userUpdateSuccess) {
+                const { userModifySuccess } = this.props;
+                if (userModifySuccess) {
                     const tempFormData = tempModalFormDate;
                     tempFormData.userName = '';
                     tempFormData.passWord = '';
@@ -325,7 +326,7 @@ class app extends Component {
                                 <Input
                                     placeholder="请输入用户名"
                                     value={modalFormDate.userName}
-                                    onChange={ (e) => { this.handleChangeModalItem('userName', e)}}
+                                    onChange={ (e) => { this.handleChangeModalItem('userName', e.target.value)}}
                                 />
                             </Form.Item>
                             <Form.Item>
@@ -368,14 +369,14 @@ class app extends Component {
 const mapStateToProps = (state) => {
     return ({
         userAddSuccess: state.users.userAddSuccess,
-        userUpdateSuccess: state.users.userUpdateSuccess,
+        userModifySuccess: state.users.userModifySuccess,
         userForbidSuccess: state.users.userForbidSuccess,
     })
 }
 
 const mapDispatchToProps = (dispatch) => ({
     addUser: params => dispatch(user.addUser(params)),
-    updateUser: params => dispatch(user.updateUser(params)),
+    modifyUser: params => dispatch(user.modifyUser(params)),
     forbidUser: params => dispatch(user.forbidUser(params)),
 })
 

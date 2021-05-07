@@ -418,7 +418,6 @@ class app extends Component {
                         />
                         <Pagination
                             style={{ float: 'right', marginTop: 20}}
-                            showQuickJumper
                             showSizeChanger={true}
                             current={currentPage}
                             total={totalPointsCount}

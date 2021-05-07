@@ -60,6 +60,11 @@ class app extends Component {
                 key: 'choiceCount',
             },
             {
+                title: '多选题数',
+                dataIndex: 'multipleCount',
+                key: 'multipleCount',
+            },
+            {
                 title: '判断题数',
                 dataIndex: 'judgementCount',
                 key: 'judgementCount',
@@ -333,15 +338,18 @@ class app extends Component {
                             dataSource={subjectsList}
                             pagination={false}
                         />
-                        <Pagination
-                            style={{ float: 'right', marginTop: 20}}
-                            showQuickJumper
-                            showSizeChanger={true}
-                            current={currentPage}
-                            total={totalSubjectCount}
-                            pageSize={pageSize}
-                            onChange={this.onChangePage}
-                        />
+                        {
+                            totalSubjectCount > pageSize ?
+                            <Pagination
+                                style={{ float: 'right', marginTop: 20}}
+                                showSizeChanger={true}
+                                current={currentPage}
+                                total={totalSubjectCount}
+                                pageSize={pageSize}
+                                onChange={this.onChangePage}
+                            /> : ''
+                        }
+                        
                     </Content>
                 </Card>
             </div>

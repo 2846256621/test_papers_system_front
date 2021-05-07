@@ -82,7 +82,22 @@ class app extends Component {
             {
                 title: '题型',
                 dataIndex: 'problemTypeText',
-                width: 50,
+                width: 70,
+            },
+            {
+                title: '题目别名',
+                dataIndex: 'problemTypeOtherText',
+                width: 150,
+                render: (text, record) => {
+                    const { selectedRowKeys } = this.state;
+                    return (
+                        <Input
+                            placeholder="请输入题目别名"
+                            onChange={(e) => this.onChangeProblemItem('problemTypeOtherText', record, e.target.value)}
+                            disabled={selectedRowKeys.indexOf(record.key) === -1}
+                        />
+                    )
+                }
             },
             {
                 title: '题目数量',
