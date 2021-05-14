@@ -23,7 +23,7 @@ const { Content } = Layout;
 const { confirm } = Modal;
 
 const problemTypeMap = {
-    choice:'选择题',
+    choice:'单选题',
     judgement: '判断题',
     blank: '填空题',
     shortAnswer: '简答题',
@@ -120,7 +120,8 @@ class app extends Component {
             {
                 title: '难度',
                 key: 'difficultyLevel',
-                dataIndex: 'difficultyLevel',
+                dataIndex: 'difficultyLevel', 
+                width: 100,
             },
             {
                 title: '分数',
@@ -155,7 +156,7 @@ class app extends Component {
                 render: (text, record) => {
                     const { userId, type } = this.state;
                     return (
-                        <Space size="middle">
+                        <div>
                             <Link
                                 to= '/problemsManage/view'
                                 onClick={ () => {
@@ -165,11 +166,13 @@ class app extends Component {
                                 replace
                             >
                                 <Button
+                                    style={{margin: 5}}
                                     type="primary"
-                                    shape="circle" 
+                                    ghost
+                                    shape="round" 
                                     icon={<EyeOutlined />}
                                     >
-                                        {/* 查看 */}
+                                        查看
                                     </Button>
                             </Link>
                             {
@@ -184,24 +187,26 @@ class app extends Component {
                                         replace
                                     >
                                         <Button
-                                            shape="circle" 
+                                            style={{margin: 5}}
+                                            shape="round" 
                                             icon={<FormOutlined />}
                                         >
-                                            {/* 修改 */}
+                                            修改
                                         </Button>
                                     </Link>
                                     <Button
                                         danger
-                                        shape="circle" 
+                                        style={{margin: 5}}
+                                        shape="round"
                                         icon={<DeleteOutlined />}
                                         onClick={() => {this.onDelProblem(record.problemId, record.problemType)}}
                                     >
-                                        {/* 删除 */}
+                                        删除
                                     </Button>
                                 </>
                                 : ''
                             }
-                        </Space>
+                        </div>
                     )
                 }
               },

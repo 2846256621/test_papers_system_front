@@ -35,7 +35,7 @@ export default class app extends Component {
 
                     <SubMenu key="sub1" icon={<LaptopOutlined />} title="试卷管理">
                         <Menu.Item key="2"><Link to="/testPaperAutomatic">自动组卷</Link></Menu.Item>
-                        <Menu.Item key="4"><Link to="/testPaperList">试题管理</Link></Menu.Item>
+                        <Menu.Item key="4"><Link to="/testPaperList">试卷管理列表</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub2" icon={<SolutionOutlined />} title="题库管理">
                         <Menu.Item key="6"><Link to='/problemsManage/add' replace>增加题目</Link></Menu.Item>

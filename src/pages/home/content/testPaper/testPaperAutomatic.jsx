@@ -30,7 +30,7 @@ const { Option }  = Select;
 const data = [{
     key: 1,
     problemType: 'choice',
-    problemTypeText: `选择题`,
+    problemTypeText: `单选题`,
     problemTypeNum: '',
     problemTypeScore: '',
 },{

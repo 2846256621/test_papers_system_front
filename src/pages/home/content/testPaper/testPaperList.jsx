@@ -152,44 +152,48 @@ class app extends Component {
                 title: '操作',
                 key: '',
                 fixed: 'right',
-                width: 100,
+                width: 150,
                 render: (text, record) => {
                     const { userId, type } = this.state;
                     return (
-                        <Space size="middle">
+                        <div>
                             <Link to={`/testPaperDetails?id=${record.id}`} replace>
                                 <Button
+                                    style={{margin: 5}}
                                     type="primary"
-                                    shape="circle" 
+                                    ghost
+                                    shape="round" 
                                     icon={<EyeOutlined />}
                                 >
-                                    {/* 查看 */}
+                                    查看
                                 </Button>
                             </Link>
                             <Button
-                                shape="circle" 
+                                style={{margin: 5}}
                                 icon={<FormOutlined />}
+                                shape="round" 
                                 onClick={() => {this.onModifyTestPaper(record)}}
                             >
-                                {/* 修改 */}
+                                修改
                             </Button>
                             {
-                                (userId === record.userId  || type === '1') ? 
+                                (+userId === record.userId  || type === '1') ? 
                                  (
                                     <>
                                         <Button
-                                            danger
-                                            shape="circle" 
+                                            style={{margin: 5}}
+                                            danger 
+                                            shape="round" 
                                             icon={<DeleteOutlined />}
                                             onClick={() => {this.onDelTestPaper(record.id)}}
                                         >
-                                            {/* 删除 */}
+                                            删除
                                         </Button>
                                     </>
                                 ) : ''
                             }
                             
-                        </Space>
+                        </div>
                     )
                 } 
               },

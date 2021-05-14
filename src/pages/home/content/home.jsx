@@ -117,7 +117,7 @@ class app extends Component {
                 }
             },
             legend: {
-                data: ['填空题', '选择题', '判断题', '简答题', '多选题']
+                data: ['填空题', '单选题', '判断题', '简答题', '多选题']
             },
             grid: {
                 left: '5%',
@@ -149,7 +149,7 @@ class app extends Component {
                     })
                 },
                 {
-                    name: '选择题',
+                    name: '单选题',
                     type: 'bar',
                     stack: 'total',
                     label: {
